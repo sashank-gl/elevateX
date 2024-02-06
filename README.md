@@ -29,13 +29,31 @@ Search candidates by skills and keywords.
 Company page with "About Us," job openings, team profiles, and contact information.
 Multiple recruiters per organization, associated with specific departments.
 
-**Job Posts:**
+**Posts By Recruiter:**
 
 Focus on essential details: technology requirements, working hours, and salary range.
 No lengthy descriptions, encourage direct applications.
 Action buttons for candidates: "Interested," "Not Interested," "Refer Someone," and "Save for Later."
 Selecting "Interested" sends resume directly to recruiter.
 Job application tracking system for recruiters.
+
+**Posts By Recruiter:**
+
+**2 types of Posts:**
+Post looking for a job.
+Referral Post if their company is hiring
+
+User
+There are 3 types of posts in total:
+
+- Recruiter postign a jobfor their company
+- Candidate posting a referral for a job opening in their company
+- Candidate looking for a job.
+
+Candidate reactions to Recruiter Post and Candidate's Referral: "Interested," "Not Interested," "Refer Someone," and "Save for Later." "Contact Directly(if they opt in)"
+
+Recruiter's reaction to Candidate's Post looking for job: 'Send Invite ' to apply for job which shares the post, 'Contact directly(if they opt in)'
+
 
 **Candidate Features:**
 
