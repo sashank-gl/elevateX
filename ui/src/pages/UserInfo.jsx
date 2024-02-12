@@ -201,18 +201,36 @@ const UserInfo = () => {
     });
   };
 
-  const makeProfilePublic = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      isPublic: true,
-    }));
+  const makeProfilePublic = async () => {
+    try {
+      await updateDoc(doc(firebaseDB, "users", user.uid), {
+        isPublic: true,
+      });
+
+      // Update local state and UI
+      setFormData((prevFormData) => ({ ...prevFormData, isPublic: true }));
+      setIsPublic(true);
+      console.log("Profile successfully made public.");
+    } catch (error) {
+      console.error("Error making profile public:", error);
+      // Handle errors appropriately (e.g., display an error message to the user)
+    }
   };
 
-  const makeProfilePrivate = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      isPublic: false,
-    }));
+  const makeProfilePrivate = async () => {
+    try {
+      await updateDoc(doc(firebaseDB, "users", user.uid), {
+        isPublic: false,
+      });
+
+      // Update local state and UI
+      setFormData((prevFormData) => ({ ...prevFormData, isPublic: false }));
+      setIsPublic(false);
+      console.log("Profile successfully made private.");
+    } catch (error) {
+      console.error("Error making profile private:", error);
+      // Handle errors appropriately
+    }
   };
 
   const labelStyle = `flex gap-4 my-1`;

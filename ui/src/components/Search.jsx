@@ -33,7 +33,7 @@ const Search = () => {
       // Name search: Partial match, full-text search
       searchQuery = query(
         collection(firebaseDB, "searchableUsers"),
-        where("name", ">=", searchTerm.toLowerCase())
+        where("name", "==", searchTerm.toLowerCase())
       );
     }
 

@@ -76,7 +76,7 @@ const Portfolio = () => {
           </div>
 
           {/* Additional fields based on privacy */}
-          {client.isPublic ? (
+          {user.uid === userId || client.isPublic ? (
             <>
               {/* Display all fields if public */}
               <div className="mb-4">
