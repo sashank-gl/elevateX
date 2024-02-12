@@ -20,9 +20,7 @@ const UserInfo = () => {
     firstName: "",
     lastName: "",
     email: "",
-    profession: "",
     phoneNumber: "",
-    objective: "",
     professionalTitle: "",
     location: "",
     summary: "",
@@ -37,7 +35,7 @@ const UserInfo = () => {
 
   const [photo, setPhoto] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [personalDetails, setPersonalDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
     setFormData((prevFormData) => ({
@@ -53,7 +51,7 @@ const UserInfo = () => {
       getDoc(docRef)
         .then((docSnapshot) => {
           if (docSnapshot.exists()) {
-            setPersonalDetails(docSnapshot.data());
+            setUserDetails(docSnapshot.data());
             setFormData(docSnapshot.data());
             fetchUserPhoto(user.uid);
           }
@@ -105,7 +103,7 @@ const UserInfo = () => {
     // Check for changes and only update changed fields
     const updatedData = { ...formData, isPublic };
     for (const field of Object.keys(formData)) {
-      if (formData[field] !== personalDetails?.[field]) {
+      if (formData[field] !== userDetails?.[field]) {
         updatedData[field] = formData[field];
       }
     }
@@ -136,19 +134,30 @@ const UserInfo = () => {
       // Handle error and inform user appropriately
     }
   };
-  console.log(formData);
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  const [uploadStatus, setUploadStatus] = useState("Upload Photo"); // Initial button text
+
   const handlePhotoUpload = async () => {
-    const input = document.getElementById("photoInput");
-    const selectedFile = input.files[0];
     if (!selectedFile) return; // Handle no file selected
 
     const storageRef = ref(storage, `users/${user.uid}/profile_photo`);
     try {
+      setUploadStatus("Uploading...");
       await uploadBytes(storageRef, selectedFile);
       const photoUrl = await getDownloadURL(storageRef);
       setPhoto(photoUrl);
+      setUploadStatus("Uploaded!");
+      setTimeout(() => {
+        setSelectedFile(null);
+        setUploadStatus("Upload Photo");
+      }, 2000);
     } catch (error) {
       console.error("Error uploading photo:", error);
+      setUploadStatus("Error"); // Set button text to 'Error'
     }
   };
 
@@ -192,15 +201,6 @@ const UserInfo = () => {
     });
   };
 
-  const handleToggle = (event) => {
-    const isChecked = event.target.checked;
-    setIsPublic(isChecked);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      isPublic: isChecked,
-    }));
-  };
-
   const makeProfilePublic = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -217,7 +217,7 @@ const UserInfo = () => {
 
   const labelStyle = `flex gap-4 my-1`;
   const labelTextStyle = `my-1 w-40`;
-  const inputStyle = `my-1`;
+  const inputStyle = `h-10 rounded-lg p-1`;
 
   return (
     <div className="flex flex-col text-xl">
@@ -237,196 +237,252 @@ const UserInfo = () => {
           transition={{ duration: 0.5 }}
           className="flex flex-col gap-4 bg-indigo-50 shadow-md rounded-lg m-12 p-8"
         >
-          <label className="">
-            Photo: <input type="file" id="photoInput" name="photo" />
-            <button
-              className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
-              onClick={handlePhotoUpload}
-            >
-              Upload Photo
-            </button>
-          </label>
+          <div className="flex items-center justify-center gap-12 h-48">
+            {photo && (
+              <div className="mb-4">
+                <img
+                  src={photo}
+                  alt="Profile"
+                  className="rounded-full h-32 w-32 mx-auto"
+                />
+              </div>
+            )}
+            <label className="flex flex-col gap-4">
+              Photo:
+              <input
+                type="file"
+                id="photoInput"
+                name="photo"
+                onChange={handleFileChange}
+              />
+              {selectedFile && (
+                <button
+                  className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+                  onClick={handlePhotoUpload}
+                  disabled={
+                    uploadStatus === "Uploading..." ||
+                    uploadStatus === "Uploaded!"
+                  }
+                >
+                  {uploadStatus}
+                </button>
+              )}
+            </label>
+          </div>
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-3 p-8 px-12 rounded-lg  min-w-96"
           >
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>First Name:</span>
-              <input
-                className={inputStyle}
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
-            </label>
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>Last Name:</span>
-
-              <input
-                className={inputStyle}
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-            </label>
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>Email:</span>
-              <input
-                className={inputStyle}
-                type="mail"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </label>
-
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>Profession:</span>
-              <input
-                className={inputStyle}
-                type="text"
-                name="profession"
-                value={formData.profession}
-                onChange={handleChange}
-              />
-            </label>
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>Phone Number:</span>
-              <input
-                className={inputStyle}
-                type="tel"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-              />
-            </label>
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>Objective:</span>
-              <input
-                className={inputStyle}
-                type="text"
-                name="objective"
-                autoComplete="off"
-                value={formData.objective}
-                onChange={handleChange}
-              />
-            </label>
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>Professional Title:</span>
-              <input
-                className={inputStyle}
-                type="text"
-                name="professionalTitle"
-                value={formData.professionalTitle}
-                onChange={handleChange}
-              />
-            </label>
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>Location:</span>
-              <input
-                className={inputStyle}
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-              />
-            </label>
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>Summary:</span>
-              <textarea
-                name="summary"
-                value={formData.summary}
-                onChange={handleChange}
-              />
-            </label>
-
-            {/* Experience, Skills, and Education as dynamic sections */}
-            <label className={labelStyle}>
-              <span className={labelTextStyle}>Experience:</span>
-            </label>
-            {formData.experience.map((exp, index) => (
-              <div key={index} className="mb-4">
-                <label>Company Name:</label>
+            <div className="flex justify-between">
+              <label className={labelStyle}>
+                <span className={labelTextStyle}>First Name:</span>
                 <input
                   className={inputStyle}
                   type="text"
-                  name={`experience[${index}].companyName`}
-                  value={exp.companyName}
-                  onChange={(e) => {
-                    const updatedExperience = [...formData.experience];
-                    updatedExperience[index].companyName = e.target.value;
-                    setFormData({ ...formData, experience: updatedExperience });
-                  }}
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
                 />
-                <label>Position:</label>
+              </label>
+              <label className={labelStyle}>
+                <span className={labelTextStyle}>Last Name:</span>
+
                 <input
                   className={inputStyle}
                   type="text"
-                  name={`experience[${index}].position`}
-                  value={exp.position}
-                  onChange={(e) => {
-                    const updatedExperience = [...formData.experience];
-                    updatedExperience[index].position = e.target.value;
-                    setFormData({ ...formData, experience: updatedExperience });
-                  }}
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
                 />
-                <label>Start Date:</label>
-                <input
-                  className={inputStyle}
-                  type="date"
-                  name={`experience[${index}].startDate`}
-                  value={exp.startDate}
-                  onChange={(e) => {
-                    const updatedExperience = [...formData.experience];
-                    updatedExperience[index].startDate = e.target.value;
-                    setFormData({ ...formData, experience: updatedExperience });
-                  }}
-                />
-                <label>End Date (optional):</label>
-                <input
-                  className={inputStyle}
-                  type="date"
-                  name={`experience[${index}].endDate`}
-                  value={exp.endDate}
-                  onChange={(e) => {
-                    const updatedExperience = [...formData.experience];
-                    updatedExperience[index].endDate = e.target.value;
-                    setFormData({ ...formData, experience: updatedExperience });
-                  }}
-                />
-                <label>Description:</label>
-                <textarea
-                  name={`experience[${index}].description`}
-                  value={exp.description}
-                  onChange={(e) => {
-                    const updatedExperience = [...formData.experience];
-                    updatedExperience[index].description = e.target.value;
-                    setFormData({ ...formData, experience: updatedExperience });
-                  }}
-                />
-                <button
-                  className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
-                  type="button"
-                  onClick={() => {
-                    const updatedExperience = formData.experience.filter(
-                      (_exp, _index) => _index !== index
-                    );
-                    setFormData({ ...formData, experience: updatedExperience });
-                  }}
-                >
-                  Remove Experience
-                </button>
+              </label>
+            </div>
+
+            <div>
+              <h1 className="text-2xl">Contact Details</h1>
+              <div className="grid grid-cols-2 gap-4">
+                <label className={labelStyle}>
+                  <span className={labelTextStyle}>Email:</span>
+                  <input
+                    className={inputStyle}
+                    type="mail"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label className={labelStyle}>
+                  <span className={labelTextStyle}>Phone Number:</span>
+                  <input
+                    className={inputStyle}
+                    type="tel"
+                    name="phoneNumber"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label className={labelStyle}>
+                  <span className={labelTextStyle}>Location:</span>
+                  <input
+                    className={inputStyle}
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                  />
+                </label>
               </div>
-            ))}
-            <button
-              className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
-              type="button"
-              onClick={() => addExperience()}
-            >
-              Add Experience
-            </button>
+            </div>
+
+            <div>
+              <h1 className="text-2xl">Professional Details</h1>
+              <label className={labelStyle}>
+                <span className={labelTextStyle}>Title:</span>
+                <input
+                  className={inputStyle}
+                  type="text"
+                  name="professionalTitle"
+                  value={formData.professionalTitle}
+                  onChange={handleChange}
+                />
+              </label>
+
+              <label className={`${labelStyle} flex-col`}>
+                <span className={`my-1`}>Objective / Summary:</span>
+                <textarea
+                  name="summary"
+                  value={formData.summary}
+                  onChange={handleChange}
+                  className="rounded-lg min-h-36"
+                />
+              </label>
+
+              {/* Experience, Skills, and Education as dynamic sections */}
+              <label className={labelStyle}>
+                <span className={labelTextStyle}>Experience:</span>
+              </label>
+              {formData.experience.map((exp, index) => (
+                <div key={index} className="grid grid-cols-2 mb-4 gap-4">
+                  <label className={labelStyle}>
+                    <span className={labelTextStyle}> Company Name:</span>
+
+                    <input
+                      className={inputStyle}
+                      type="text"
+                      name={`experience[${index}].companyName`}
+                      value={exp.companyName}
+                      onChange={(e) => {
+                        const updatedExperience = [...formData.experience];
+                        updatedExperience[index].companyName = e.target.value;
+                        setFormData({
+                          ...formData,
+                          experience: updatedExperience,
+                        });
+                      }}
+                    />
+                  </label>
+                  <label className={labelStyle}>
+                    <span className={labelTextStyle}>Position:</span>
+
+                    <input
+                      className={inputStyle}
+                      type="text"
+                      name={`experience[${index}].position`}
+                      value={exp.position}
+                      onChange={(e) => {
+                        const updatedExperience = [...formData.experience];
+                        updatedExperience[index].position = e.target.value;
+                        setFormData({
+                          ...formData,
+                          experience: updatedExperience,
+                        });
+                      }}
+                    />
+                  </label>
+                  <label className={labelStyle}>
+                    <span className={labelTextStyle}> Start Date:</span>
+
+                    <input
+                      className={inputStyle}
+                      type="date"
+                      name={`experience[${index}].startDate`}
+                      value={exp.startDate}
+                      onChange={(e) => {
+                        const updatedExperience = [...formData.experience];
+                        updatedExperience[index].startDate = e.target.value;
+                        setFormData({
+                          ...formData,
+                          experience: updatedExperience,
+                        });
+                      }}
+                    />
+                  </label>
+                  <label className={labelStyle}>
+                    <span className={labelTextStyle}>
+                      {" "}
+                      End Date (optional):
+                    </span>
+
+                    <input
+                      className={inputStyle}
+                      type="date"
+                      name={`experience[${index}].endDate`}
+                      value={exp.endDate}
+                      onChange={(e) => {
+                        const updatedExperience = [...formData.experience];
+                        updatedExperience[index].endDate = e.target.value;
+                        setFormData({
+                          ...formData,
+                          experience: updatedExperience,
+                        });
+                      }}
+                    />
+                  </label>
+                  <label className={`${labelStyle} flex-col col-span-2`}>
+                    <span className={`my-1`}>Description:</span>
+
+                    <textarea
+                      name={`experience[${index}].description`}
+                      value={exp.description}
+                      onChange={(e) => {
+                        const updatedExperience = [...formData.experience];
+                        updatedExperience[index].description = e.target.value;
+                        setFormData({
+                          ...formData,
+                          experience: updatedExperience,
+                        });
+                      }}
+                      className="rounded-lg min-h-36"
+                    />
+                  </label>
+                  <div className="col-span-2 flex justify-center items-center">
+                    <button
+                      className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+                      type="button"
+                      onClick={() => {
+                        const updatedExperience = formData.experience.filter(
+                          (_exp, _index) => _index !== index
+                        );
+                        setFormData({
+                          ...formData,
+                          experience: updatedExperience,
+                        });
+                      }}
+                    >
+                      Remove Experience
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <button
+                className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+                type="button"
+                onClick={() => addExperience()}
+              >
+                Add Experience
+              </button>
+            </div>
             <label className={labelStyle}>
               {" "}
               <span className={labelTextStyle}></span> Skills:
@@ -471,77 +527,90 @@ const UserInfo = () => {
               <span className={labelTextStyle}></span> Education:
             </label>
             {formData.education.map((edu, index) => (
-              <div key={index} className="mb-4">
-                <label>Institution:</label>
-                <input
-                  className={inputStyle}
-                  type="text"
-                  name={`education[${index}].institution`}
-                  value={edu.institution}
-                  onChange={(e) => {
-                    const updatedEducation = [...formData.education];
-                    updatedEducation[index].institution = e.target.value;
-                    setFormData({ ...formData, education: updatedEducation });
-                  }}
-                />
-                <label>Degree:</label>
-                <input
-                  className={inputStyle}
-                  type="text"
-                  name={`education[${index}].degree`}
-                  value={edu.degree}
-                  onChange={(e) => {
-                    const updatedEducation = [...formData.education];
-                    updatedEducation[index].degree = e.target.value;
-                    setFormData({ ...formData, education: updatedEducation });
-                  }}
-                />
-                <label>Start Date:</label>
-                <input
-                  className={inputStyle}
-                  type="date"
-                  name={`education[${index}].startDate`}
-                  value={edu.startDate}
-                  onChange={(e) => {
-                    const updatedEducation = [...formData.education];
-                    updatedEducation[index].startDate = e.target.value;
-                    setFormData({ ...formData, education: updatedEducation });
-                  }}
-                />
-                <label>End Date (optional):</label>
-                <input
-                  className={inputStyle}
-                  type="date"
-                  name={`education[${index}].endDate`}
-                  value={edu.endDate}
-                  onChange={(e) => {
-                    const updatedEducation = [...formData.education];
-                    updatedEducation[index].endDate = e.target.value;
-                    setFormData({ ...formData, education: updatedEducation });
-                  }}
-                />
-                <label>Description (optional):</label>
-                <textarea
-                  name={`education[${index}].description`}
-                  value={edu.description}
-                  onChange={(e) => {
-                    const updatedEducation = [...formData.education];
-                    updatedEducation[index].description = e.target.value;
-                    setFormData({ ...formData, education: updatedEducation });
-                  }}
-                />
-                <button
-                  className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
-                  type="button"
-                  onClick={() => {
-                    const updatedEducation = formData.education.filter(
-                      (_edu, _index) => _index !== index
-                    );
-                    setFormData({ ...formData, education: updatedEducation });
-                  }}
-                >
-                  Remove Education
-                </button>
+              <div key={index} className="grid grid-cols-2 mb-4 gap-4">
+                <label className={labelStyle}>
+                  <span className={labelTextStyle}>Institution:</span>
+                  <input
+                    className={inputStyle}
+                    type="text"
+                    name={`education[${index}].institution`}
+                    value={edu.institution}
+                    onChange={(e) => {
+                      const updatedEducation = [...formData.education];
+                      updatedEducation[index].institution = e.target.value;
+                      setFormData({ ...formData, education: updatedEducation });
+                    }}
+                  />
+                </label>
+                <label className={labelStyle}>
+                  <span className={labelTextStyle}>Degree:</span>
+                  <input
+                    className={inputStyle}
+                    type="text"
+                    name={`education[${index}].degree`}
+                    value={edu.degree}
+                    onChange={(e) => {
+                      const updatedEducation = [...formData.education];
+                      updatedEducation[index].degree = e.target.value;
+                      setFormData({ ...formData, education: updatedEducation });
+                    }}
+                  />
+                </label>
+                <label className={labelStyle}>
+                  <span className={labelTextStyle}>Start Date:</span>
+                  <input
+                    className={inputStyle}
+                    type="date"
+                    name={`education[${index}].startDate`}
+                    value={edu.startDate}
+                    onChange={(e) => {
+                      const updatedEducation = [...formData.education];
+                      updatedEducation[index].startDate = e.target.value;
+                      setFormData({ ...formData, education: updatedEducation });
+                    }}
+                  />
+                </label>
+                <label className={labelStyle}>
+                  <span className={labelTextStyle}>End Date (optional):</span>
+                  <input
+                    className={inputStyle}
+                    type="date"
+                    name={`education[${index}].endDate`}
+                    value={edu.endDate}
+                    onChange={(e) => {
+                      const updatedEducation = [...formData.education];
+                      updatedEducation[index].endDate = e.target.value;
+                      setFormData({ ...formData, education: updatedEducation });
+                    }}
+                  />
+                </label>
+                <label className={`${labelStyle} flex-col col-span-2`}>
+                  <span className={`my-1`}>Description:</span>
+                  <textarea
+                    name={`education[${index}].description`}
+                    value={edu.description}
+                    onChange={(e) => {
+                      const updatedEducation = [...formData.education];
+                      updatedEducation[index].description = e.target.value;
+                      setFormData({ ...formData, education: updatedEducation });
+                    }}
+                    className="rounded-lg min-h-36"
+                  />
+                </label>
+                <div className="col-span-2 flex justify-center items-center">
+                  <button
+                    className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+                    type="button"
+                    onClick={() => {
+                      const updatedEducation = formData.education.filter(
+                        (_edu, _index) => _index !== index
+                      );
+                      setFormData({ ...formData, education: updatedEducation });
+                    }}
+                  >
+                    Remove Education
+                  </button>
+                </div>
               </div>
             ))}
             <button
@@ -602,128 +671,64 @@ const UserInfo = () => {
               </button>
             )}
           </div>
-          {photo && (
-            <div className="mb-4">
-              <img
-                src={photo}
-                alt="Profile"
-                className="rounded-full h-32 w-32 mx-auto"
-              />
-            </div>
-          )}
-          {personalDetails ? (
-            <>
-              {/* Name */}
-              <div className="flex items-center mb-4">
-                <span className="font-semibold text-gray-700 w-32 text-right">
-                  Name:
-                </span>
-                <p className="text-lg font-medium text-gray-900">
-                  {personalDetails.firstName} {personalDetails.lastName}
-                </p>
-              </div>
 
-              {/* Email */}
-              <div className="flex items-center mb-4">
-                <span className="font-semibold text-gray-700 w-32 text-right">
-                  Email:
-                </span>
-                <p className="text-lg font-medium text-gray-900">
-                  {personalDetails.email}
-                </p>
-              </div>
+          {userDetails ? (
+            <motion.div className="gap-6">
+              {/* Personal Details */}
 
-              {/* Profession */}
-              <div className="flex items-center mb-4">
-                <span className="font-semibold text-gray-700 w-32 text-right">
-                  Profession:
-                </span>
-                <p className="text-lg font-medium text-gray-900">
-                  {personalDetails.profession}
-                </p>
-              </div>
-
-              {/* Phone */}
-              <div className="flex items-center mb-4">
-                <span className="font-semibold text-gray-700 w-32 text-right">
-                  Phone:
-                </span>
-                <p className="text-lg font-medium text-gray-900">
-                  {personalDetails.phoneNumber}
-                </p>
-              </div>
-
-              {/* Objective */}
-              <div className="flex items-center mb-4">
-                <span className="font-semibold text-gray-700 w-32 text-right">
-                  Objective:
-                </span>
-                <p className="text-lg font-medium text-gray-900">
-                  {personalDetails.objective}
-                </p>
-              </div>
-
-              {/* Additional Sections (conditional) */}
-              {personalDetails.professionalTitle && (
-                <div className="flex items-center mb-4">
-                  <span className="font-semibold text-gray-700 w-32 text-right">
-                    Professional Title:
-                  </span>
-                  <p className="text-lg font-medium text-gray-900">
-                    {personalDetails.professionalTitle}
+              <div className="flex justify-center items-center">
+                <div className="w-2/6">
+                  {photo && (
+                    <div className="p-10 rounded-lg">
+                      <img
+                        src={photo}
+                        alt="Profile"
+                        className="rounded-lg object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="w-4/6 flex flex-col gap-2">
+                  <p className="text-5xl">
+                    {userDetails.firstName} {userDetails.lastName}
+                  </p>
+                  <p className="text-4xl">{userDetails.professionalTitle}</p>
+                  <p>{userDetails.summary}</p>
+                  <p>Currently residing in {userDetails.location}</p>
+                  <p>
+                    Reach me on {userDetails.email} or {userDetails.phoneNumber}
+                    .
                   </p>
                 </div>
-              )}
-
-              {personalDetails.location && (
-                <div className="flex items-center mb-4">
-                  <span className="font-semibold text-gray-700 w-32 text-right">
-                    Location:
-                  </span>
-                  <p className="text-lg font-medium text-gray-900">
-                    {personalDetails.location}
-                  </p>
-                </div>
-              )}
-
-              {personalDetails.summary && (
-                <div className="flex items-center mb-4">
-                  <span className="font-semibold text-gray-700 w-32 text-right">
-                    Summary:
-                  </span>
-                  <p className="text-lg font-medium text-gray-900">
-                    {personalDetails.summary}
-                  </p>
-                </div>
-              )}
+              </div>
 
               {/* Experience (if available) */}
-              {personalDetails.experience && (
+              {userDetails.experience && (
                 <div className="mb-4">
                   <h5 className="font-semibold text-gray-700 mb-2">
                     Experience:
                   </h5>
                   <ul className="list-disc pl-3 text-gray-700">
-                    {personalDetails.experience.map((exp) => (
-                      <li key={exp.id || exp.companyName}>
+                    {userDetails.experience.map((exp) => (
+                      <li key={exp.id || exp.companyName} className="list-none">
                         <p>
-                          {exp.position} at {exp.companyName}
+                          {exp.position} at {exp.companyName} from{" "}
+                          {exp.startDate} to {exp.endDate || "Present"}
                         </p>
                         <p>
-                          {exp.startDate} - {exp.endDate || "Present"}
+                          {/* {exp.description && <p>{exp.description}</p>} */}
                         </p>
-                        {exp.description && <p>{exp.description}</p>}
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
 
-              {personalDetails.skills && (
+              {userDetails.skills && (
                 <div className="mb-4">
                   <h5 className="font-semibold text-gray-700 mb-2">Skills:</h5>
                   <ul className="list-disc pl-3 text-gray-700">
-                    {personalDetails.skills.map((skill) => (
+                    {userDetails.skills.map((skill) => (
                       <li
                         key={skill}
                         className="text-blue-500 hover:text-blue-600 transition duration-300"
@@ -736,13 +741,13 @@ const UserInfo = () => {
               )}
 
               {/* Education (if available) */}
-              {personalDetails.education && (
+              {userDetails.education && (
                 <div className="mb-4">
                   <h5 className="font-semibold text-gray-700 mb-2">
                     Education:
                   </h5>
                   <ul className="list-disc pl-3 text-gray-700">
-                    {personalDetails.education.map((edu) => (
+                    {userDetails.education.map((edu) => (
                       <li key={edu.id || edu.institution}>
                         <p>
                           {edu.degree} at {edu.institution}
@@ -756,7 +761,7 @@ const UserInfo = () => {
                   </ul>
                 </div>
               )}
-            </>
+            </motion.div>
           ) : (
             <p className="text-lg font-medium text-gray-700 text-center">
               Loading personal details...
