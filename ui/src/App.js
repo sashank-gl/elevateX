@@ -9,8 +9,6 @@ import { firebaseDB } from "./firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 
 const App = () => {
-  const { user } = UserAuth();
-
   return (
     <BrowserRouter>
       <Routes>

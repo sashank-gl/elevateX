@@ -1,6 +1,5 @@
 import React from "react";
 import { UserAuth } from "../contexts/AuthContext";
-import Portfolio from "./Portfolio";
 import UserInfo from "./UserInfo";
 import Navbar from "../components/Navbar";
 
