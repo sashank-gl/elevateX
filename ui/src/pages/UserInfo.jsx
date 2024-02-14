@@ -51,7 +51,6 @@ const UserInfo = () => {
         position: "",
         location: "",
         responsibilities: "",
-        recognitions: [],
         skills: "",
         startDate: "",
         endDate: "",
@@ -80,7 +79,6 @@ const UserInfo = () => {
       {
         name: "",
         description: "",
-        features: "",
         stack: "",
         startDate: "",
         endDate: "",
@@ -108,10 +106,11 @@ const UserInfo = () => {
       },
     ],
     uniqueUrl: `${BASE_URL}/${user.uid}`,
+    templateId: "monochromatic",
+    templateName: "Monochromatic",
     isPublic: false,
   });
-  const [isPublic, setIsPublic] = useState(formData.isPublic); // Initialize with initial value
-
+  const [isPublic, setIsPublic] = useState(formData.isPublic);
   const [photo, setPhoto] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
@@ -375,7 +374,6 @@ const UserInfo = () => {
           position: "",
           location: "",
           responsibilities: "",
-          recognitions: [],
           skills: "",
           startDate: "",
           endDate: "",
@@ -384,15 +382,16 @@ const UserInfo = () => {
     });
   };
 
-  const removeExperience = (indexToRemove) => {
+  const removeExperience = (index) => {
     const updatedExperience = formData.experience.filter(
-      (exp, index) => index !== indexToRemove
+      (_exp, _index) => _index !== index
     );
     setFormData({
       ...formData,
       experience: updatedExperience,
     });
   };
+
   const handleExperienceChange = (index, field, value) => {
     const updatedExperience = [...formData.experience];
     updatedExperience[index][field] = value;
@@ -535,7 +534,6 @@ const UserInfo = () => {
       keywords: updatedKeywords,
     }));
   };
-
   const headingStyle = `text-4xl font-bold text-center py-3 italic rounded-full cursor-pointer hover:bg-blue-500 hover:text-white`;
   return (
     <div className="flex flex-col text-xl">
@@ -638,6 +636,7 @@ const UserInfo = () => {
                 handleChange={handleSkillChange}
                 addSkill={addSkill}
                 removeSkill={removeSkill}
+                professionalTitle={formData.professionalTitle}
               />
             )}
 

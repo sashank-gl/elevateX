@@ -21,16 +21,21 @@ const Skills = ({ skills, handleChange, addSkill, removeSkill }) => {
           </label>
           <label className={labelStyle}>
             <span className={labelTextStyle}>Proficiency:</span>
-            <input
+            <select
               className={inputStyle}
-              type="text"
               name={`skills[${index}].proficiency`}
               value={skill?.proficiency}
               onChange={(e) =>
                 handleChange(index, "proficiency", e.target.value)
               }
-            />
+            >
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+              <option value="expert">Expert</option>
+            </select>
           </label>
+
           <label className={labelStyle}>
             <span className={labelTextStyle}>Category:</span>
             <input

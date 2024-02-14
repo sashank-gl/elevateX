@@ -1,5 +1,3 @@
-// ProjectsInput.js
-
 import React from "react";
 
 const Projects = ({
@@ -7,6 +5,9 @@ const Projects = ({
   handleProjectChange,
   addProject,
   removeProject,
+  addFeature,
+  removeFeature,
+  updateFeature,
 }) => {
   const labelStyle = "flex flex-col gap-4";
   const inputStyle = "h-10 rounded-lg p-1";
@@ -27,7 +28,7 @@ const Projects = ({
               }
             />
           </label>
-          <label className={labelStyle}>
+          <label className={`${labelStyle} col-span-2`}>
             <span className="my-1">Description:</span>
             <textarea
               value={project.description}
@@ -37,18 +38,8 @@ const Projects = ({
               className="rounded-lg min-h-36"
             />
           </label>
-          <label className={labelStyle}>
-            <span className="my-1">Features:</span>
-            <input
-              className={inputStyle}
-              type="text"
-              value={project.features}
-              onChange={(e) =>
-                handleProjectChange(index, "features", e.target.value)
-              }
-            />
-          </label>
-          <label className={labelStyle}>
+
+          <label className={`${labelStyle} col-span-2`}>
             <span className="my-1">Stack:</span>
             <input
               className={inputStyle}

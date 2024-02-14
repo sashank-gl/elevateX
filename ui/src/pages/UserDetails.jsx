@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const UserDetails = ({ userDetails, photo }) => {
-  console.log("Photot: ", photo);
   return (
     <motion.div className="gap-6">
       {/* Personal Details */}
@@ -25,35 +24,43 @@ const UserDetails = ({ userDetails, photo }) => {
           <p className="text-4xl">{userDetails.professionalTitle}</p>
           <p>{userDetails.summary}</p>
           <p>Currently residing in {userDetails.location}</p>
+
           <p>
             Reach me at:
-            <br />
-            Email: {userDetails.contacts.email}
-            <br />
-            Phone: {userDetails.contacts.phoneNumber}
-            <br />
-            WhatsApp: {userDetails.contacts.whatsApp}
-            <br />
-            LinkedIn: {userDetails.contacts.linkedIn}
-            <br />
-            Twitter: {userDetails.contacts.twitter}
-            <br />
-            GitHub: {userDetails.contacts.gitHub}
-            <br />
-            Facebook: {userDetails.contacts.facebook}
-            <br />
-            Instagram: {userDetails.contacts.instagram}
-            <br />
-            Stack Overflow: {userDetails.contacts.stackoverflow}
+            {userDetails.contacts.email && (
+              <p>Email: {userDetails.contacts.email}</p>
+            )}
+            {userDetails.contacts.phoneNumber && (
+              <p>Phone: {userDetails.contacts.phoneNumber}</p>
+            )}
+            {userDetails.contacts.whatsApp && (
+              <p>WhatsApp: {userDetails.contacts.whatsApp}</p>
+            )}
+            {userDetails.contacts.linkedIn && (
+              <p>LinkedIn: {userDetails.contacts.linkedIn}</p>
+            )}
+            {userDetails.contacts.twitter && (
+              <p>Twitter: {userDetails.contacts.twitter}</p>
+            )}
+            {userDetails.contacts.gitHub && (
+              <p>GitHub: {userDetails.contacts.gitHub}</p>
+            )}
+            {userDetails.contacts.facebook && (
+              <p>Facebook: {userDetails.contacts.facebook}</p>
+            )}
+            {userDetails.contacts.instagram && (
+              <p>Instagram: {userDetails.contacts.instagram}</p>
+            )}
+            {userDetails.contacts.stackoverflow && (
+              <p>Stack Overflow: {userDetails.contacts.stackoverflow}</p>
+            )}
           </p>
         </div>
       </div>
 
       {/* Professional Details */}
       <div className="mb-4">
-        <h5 className="font-semibold text-gray-700 mb-2">
-          Professional Details:
-        </h5>
+      
         <p>
           <strong>Title:</strong> {userDetails.professionalTitle}
         </p>
@@ -66,9 +73,7 @@ const UserDetails = ({ userDetails, photo }) => {
         <p>
           <strong>Portfolio Goal:</strong> {userDetails.portfolioGoal}
         </p>
-        <p>
-          <strong>Summary:</strong> {userDetails.summary}
-        </p>
+
         {userDetails.keywords && userDetails.keywords.length > 0 && (
           <p>
             <strong>Keywords:</strong> {userDetails.keywords.join(", ")}

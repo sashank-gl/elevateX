@@ -14,7 +14,9 @@ const Portfolio = () => {
   const [client, setClient] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [templateId, setTemplateId] = useState(null);
-  const [templateName, setTemplateName] = useState(null); // Added state for templateName
+  const [templateName, setTemplateName] = useState(null);
+
+  console.log('Template ID: ',templateId);
 
   useEffect(() => {
     if (userId) {
@@ -25,7 +27,7 @@ const Portfolio = () => {
             const clientData = docSnapshot.data();
             setClient(clientData);
             setTemplateId(clientData?.templateId);
-            setTemplateName(clientData?.templateName); // Set templateName
+            setTemplateName(clientData?.templateName);
           } else {
             console.log("User document does not exist");
           }
@@ -33,13 +35,9 @@ const Portfolio = () => {
         .catch((error) => {
           console.error("Error fetching user document:", error);
         });
-
-      // Optional: Fetch user photo (implement as needed)
-      // ... // Use useEffect and getDownloadURL as before
     }
   }, [userId]);
 
-  
   useEffect(() => {
     if (userId) {
       const storageRef = ref(storage, `users/${userId}/profile_photo`);
@@ -53,14 +51,9 @@ const Portfolio = () => {
     }
   }, [userId]);
 
-
-  console.log('Client',client)
-  console.log('User',user)
-  console.log('Photo',photo)
-
   const renderTemplate = () => {
     if (!templateId) {
-      return null; // Early return if no templateId
+      return null;
     }
 
     const TemplateComponent = React.lazy(() =>
@@ -79,7 +72,6 @@ const Portfolio = () => {
       <motion.div className="gap-6">
         {user && client && (user.uid === userId || client.isPublic) ? (
           <>
-            {templateName && <h2>{templateName}</h2>}
             {renderTemplate()}
           </>
         ) : (

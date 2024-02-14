@@ -69,6 +69,18 @@ const PersonalDetails = ({ formData, setFormData }) => {
         </label>
 
         <label className={labelStyle}>
+          <span className={labelTextStyle}>Location:</span>
+          <input
+            className={inputStyle}
+            type="text"
+            name="location"
+            value={formData?.location}
+            onChange={handleChange}
+          />
+        </label>
+
+
+        <label className={labelStyle}>
           <span className={labelTextStyle}>WhatsApp:</span>
           <input
             className={inputStyle}

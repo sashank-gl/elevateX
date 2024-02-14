@@ -1,11 +1,14 @@
-// ExperienceDetails.js
+import React from "react";
 
-import React from 'react';
-
-const ExperienceDetails = ({ experience, addExperience, removeExperience, handleChange }) => {
-  const labelStyle = 'flex gap-4 my-1';
-  const labelTextStyle = 'my-1 w-40';
-  const inputStyle = 'h-10 rounded-lg p-1';
+const ExperienceDetails = ({
+  experience,
+  addExperience,
+  removeExperience,
+  handleChange,
+}) => {
+  const labelStyle = "flex gap-4 my-1";
+  const labelTextStyle = "my-1 w-40";
+  const inputStyle = "h-10 rounded-lg p-1";
 
   return (
     <div>
@@ -18,7 +21,9 @@ const ExperienceDetails = ({ experience, addExperience, removeExperience, handle
               type="text"
               name={`experience[${index}].companyName`}
               value={exp.companyName}
-              onChange={(e) => handleChange(index, 'companyName', e.target.value)}
+              onChange={(e) =>
+                handleChange(index, "companyName", e.target.value)
+              }
             />
           </label>
           <label className={labelStyle}>
@@ -28,7 +33,7 @@ const ExperienceDetails = ({ experience, addExperience, removeExperience, handle
               type="text"
               name={`experience[${index}].position`}
               value={exp.position}
-              onChange={(e) => handleChange(index, 'position', e.target.value)}
+              onChange={(e) => handleChange(index, "position", e.target.value)}
             />
           </label>
           <label className={labelStyle}>
@@ -38,7 +43,7 @@ const ExperienceDetails = ({ experience, addExperience, removeExperience, handle
               type="date"
               name={`experience[${index}].startDate`}
               value={exp.startDate}
-              onChange={(e) => handleChange(index, 'startDate', e.target.value)}
+              onChange={(e) => handleChange(index, "startDate", e.target.value)}
             />
           </label>
           <label className={labelStyle}>
@@ -48,16 +53,28 @@ const ExperienceDetails = ({ experience, addExperience, removeExperience, handle
               type="date"
               name={`experience[${index}].endDate`}
               value={exp.endDate}
-              onChange={(e) => handleChange(index, 'endDate', e.target.value)}
+              onChange={(e) => handleChange(index, "endDate", e.target.value)}
             />
           </label>
           <label className={`${labelStyle} flex-col col-span-2`}>
-            <span className={`my-1`}>Description:</span>
+            <span className={`my-1`}>Responsibilities:</span>
             <textarea
-              name={`experience[${index}].description`}
-              value={exp.description}
-              onChange={(e) => handleChange(index, 'description', e.target.value)}
+              name={`experience[${index}].responsibilities`}
+              value={exp.responsibilities}
+              onChange={(e) =>
+                handleChange(index, "responsibilities", e.target.value)
+              }
               className="rounded-lg min-h-36"
+            />
+          </label>
+
+          <label className={`${labelStyle} flex-col col-span-2`}>
+            <span className={`my-1`}>Skills:</span>
+            <input
+              name={`experience[${index}].skills`}
+              value={exp.skills}
+              onChange={(e) => handleChange(index, "skills", e.target.value)}
+              className="rounded-lg"
             />
           </label>
           <div className="col-span-2 flex justify-center items-center">

@@ -50,13 +50,18 @@ const ProfessionalDetails = ({
 
       <label className={labelStyle}>
         <span className={labelTextStyle}>Portfolio Goal:</span>
-        <input
+        <select
           className={inputStyle}
-          type="text"
           name="portfolioGoal"
           value={formData?.portfolioGoal}
           onChange={handleChange}
-        />
+        >
+          <option value="attract-jobs">Attracting Job Offers</option>
+          <option value="showcase-skills">Showcasing Skills</option>
+          <option value="freelance-presence">
+            Establishing Freelance Presence
+          </option>
+        </select>
       </label>
 
       <label className={`${labelStyle} flex-col`}>
