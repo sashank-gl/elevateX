@@ -8,7 +8,9 @@ import {
   limit,
   getDocs,
 } from "firebase/firestore";
-import { firebaseDB } from "../firebaseConfig"; // Replace with your Firebase instance
+import { firebaseDB } from "../firebaseConfig";
+import { IoSearch } from "react-icons/io5";
+
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -53,29 +55,33 @@ const Search = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSearch} className="relative border-2 p-2 flex gap-3">
+    <div className="">
+      <form onSubmit={handleSearch} className="relative flex gap-3">
         <input
           type="text"
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search by Email or Name"
+          placeholder="Search by Email"
+          className="py-3 px-6 w-96 rounded-full ring-2 focus:outline-none ring-blue-400 focus:ring-blue-500 ring-inset"
         />
         <button
-          className="bg-blue-500 text-white font-semibold p-2 rounded-lg px-4"
+          className="bg-blue-500 text-white font-semibold rounded-full p-3 text-2xl"
           type="submit"
         >
-          Search
+          <IoSearch />
         </button>
-        <div className="absolute -bottom-20">
+        <div className="absolute top-full w-96 mt-2 rounded-full">
           {searchResults.length > 0 && (
-            <ul>
+            <ul className="rounded-full">
               {searchResults.map((user) => (
-                <li className="p-5 hover:bg-blue-500 bg-blue-300" key={user.id}>
-                  <a className="" href={user.uniqueUrl}>
+                <a className="" href={user.uniqueUrl} onClick={()=>{setSearchResults([])}}>
+                  <li
+                    className="rounded-full py-5 font-semibold px-6 w-96 hover:text-white hover:bg-blue-500 bg-blue-300"
+                    key={user.id}
+                  >
                     {user.name}
-                  </a>
-                </li>
+                  </li>
+                </a>
               ))}
             </ul>
           )}

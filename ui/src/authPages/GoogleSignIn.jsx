@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { UserAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Loader from "../components/Loader";
+
 const GoogleSignIn = () => {
   const { signInWithGoogle, user } = UserAuth();
   const navigate = useNavigate();
+
   const handleSignInWithGoogle = async () => {
     try {
       await signInWithGoogle();
       navigate("/");
-      console.log("Sign in working");
     } catch (error) {
       console.log(error);
     }
@@ -19,58 +21,96 @@ const GoogleSignIn = () => {
     if (user != null) {
       navigate("/");
     } else {
-      // Handle initial loading or potential errors
-      console.log("User data not yet available");
+      <Loader />;
     }
   }, [user]);
 
+  const parentVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.25,
+        when: "beforeChildren",
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const childVariants = {
+    hidden: {
+      opacity: 0,
+      x: -50,
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+    },
+  };
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial="hidden"
+      animate="visible"
+      variants={parentVariants}
       className="h-screen flex"
-      transition={{ duration: 0.5 }}
     >
       {/* Left Section - Benefits and Features */}
-      <motion.div
-        initial={{ y: 100 }}
-        animate={{ y: 0 }}
-        className="w-1/2 flex flex-col justify-center items-center bg-blue-500 text-white p-10"
-        transition={{ duration: 1 }}
-      >
-        <h2 className="text-3xl font-bold mb-6">Why ElevateX?</h2>
-        <p className="text-lg mb-4">
+      <motion.div className="w-1/2 flex flex-col text-center justify-center items-center bg-blue-500 text-white gap-6 p-10">
+        <motion.h2 variants={childVariants} className="text-4xl font-bold mb-6">
+          Why ElevateX?
+        </motion.h2>
+        <motion.p variants={childVariants} className="text-xl mb-4">
           Tired of spending hours building and maintaining your portfolio
           website? ElevateX takes the struggle out of portfolio creation,
           allowing you to showcase your skills and projects in minutes. Simply
           sign in, enter your details, choose a template, and your professional
           portfolio is ready to impress!
-        </p>
-        <h1 className="text-2xl mb-4 font-bold">ElevateX offers:</h1>
-        <ul className="text-lg list-disc pl-5 mb-4">
-          <li>
-            Quick and easy website creation: No coding or design experience
-            needed.
-          </li>
-          <li>
-            Professional templates: Choose from a variety of modern and stylish
-            designs.
-          </li>
-          <li>Effortless customization: Add your personal touch with ease.</li>
-          <li>
-            Free with your chosen subdomain: Showcase your talent with a branded
-            URL.
-          </li>
-        </ul>
-        <p className="text-lg">
+        </motion.p>
+        <motion.h1 variants={childVariants} className="text-4xl mb-4 font-bold">
+          ElevateX offers:
+        </motion.h1>
+        <motion.div
+          variants={childVariants}
+          className="text-xl list-none pl-5 mb-4"
+        >
+          <motion.div>
+            <p className="italic my-2">
+              <span className="font-semibold">
+                Quick and easy website creation:{" "}
+              </span>
+              No coding or design experience needed.
+            </p>
+          </motion.div>
+          <motion.div>
+            <p className="italic my-2">
+              <span className="font-semibold">Professional templates: </span>
+              Choose from a variety of modern and stylish designs.
+            </p>
+          </motion.div>
+          <motion.div>
+            <p className="italic my-2">
+              <span className="font-semibold">Effortless customization: </span>
+              Add your personal touch with ease.
+            </p>
+          </motion.div>
+          <motion.div>
+            <p className="italic my-2">
+              <span className="font-semibold">
+                Free with your chosen subdomain:{" "}
+              </span>
+              Showcase your talent with a branded URL.
+            </p>
+          </motion.div>
+        </motion.div>
+        <motion.p variants={childVariants} className="text-xl">
           Sign in today and join the growing community of developers using
-          ElevateX to level up their online presence.
-        </p>
+          ElevateX to level up your online presence.
+        </motion.p>
       </motion.div>
 
       {/* Right Section - Sign-in Form */}
       <motion.div
-        initial={{ y: -100 }}
+        initial={{ y: -200 }}
         animate={{ y: 0 }}
         className="w-1/2 flex flex-col justify-center items-center bg-white p-10"
         transition={{ duration: 1 }}

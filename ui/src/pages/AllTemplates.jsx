@@ -15,7 +15,8 @@ const AllTemplates = () => {
     setTemplates([
       { id: "monochromatic", name: "Monochromatic" },
       { id: "minimalist", name: "Minimalist" },
-      { id: "vibrant", name: "Vibrant" }, // Example of a new template
+      { id: "vibrant", name: "Vibrant" },
+      { id: "vibrant", name: "Vibrant" },
     ]);
   }, []);
 
@@ -25,25 +26,38 @@ const AllTemplates = () => {
     const userDocRef = doc(firebaseDB, "users", user?.uid);
     updateDoc(userDocRef, {
       templateId: template.id,
-      templateName: template.name, // Include templateName in the update
+      templateName: template.name,
     });
   };
 
   return (
     <div>
-      <h1>All Templates</h1>
       <div>
-        <h1>Free</h1>
-        <div className="grid grid-cols-4 gap-5">
+        <div className="flex py-3 gap-6 font-semibold">
+          <div>Free</div>
+          <div>Paid</div>
+          <div>Purchased</div>
+        </div>
+        <div className="grid grid-cols-3 gap-5">
           {templates.map((template) => (
-            <div key={template.id} className="flex flex-col gap-3 items-center">
-              {/* ... */}
-              <div
-                onClick={() => handleTemplateClick(template)}
-                // Pass the entire template object to the handler
-                className="cursor-pointer bg-red-500 rounded-lg py-2 px-4 text-white font-semibold"
-              >
-                Select
+            <div
+              key={template.id}
+              className="flex flex-col gap-3 items-center justify-between shadow-lg w-96 h-64"
+            >
+              <div className="mt-20 text-3xl font-semibold text-blue-500">{template.name}</div>
+              <div className="flex gap-4 pb-4">
+                <div
+                  onClick={() => handleTemplateClick(template)}
+                  className="cursor-pointer bg-red-500 rounded-lg py-2 px-4 text-white font-semibold"
+                >
+                  Preview
+                </div>
+                <div
+                  onClick={() => handleTemplateClick(template)}
+                  className="cursor-pointer bg-red-500 rounded-lg py-2 px-4 text-white font-semibold"
+                >
+                  Select
+                </div>
               </div>
             </div>
           ))}

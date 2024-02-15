@@ -115,6 +115,66 @@ const UserInfo = () => {
   const [editMode, setEditMode] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
 
+  useEffect(() => {
+    if (user) {
+      const docRef = doc(firebaseDB, "users", user.uid);
+
+      getDoc(docRef)
+        .then((docSnapshot) => {
+          if (docSnapshot.exists()) {
+            setUserDetails(docSnapshot.data());
+            setFormData(docSnapshot.data());
+            fetchUserPhoto(user.uid);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching personal details:", error);
+        });
+    }
+  }, [user]);
+
+  const fetchUserPhoto = async (userId) => {
+    const storageRef = ref(storage, `users/${userId}/profile_photo`);
+    try {
+      const photoUrl = await getDownloadURL(storageRef);
+      setPhoto(photoUrl);
+    } catch (error) {
+      console.error("Error fetching user photo:", error);
+    }
+  };
+
+  const makeProfilePublic = async () => {
+    try {
+      await updateDoc(doc(firebaseDB, "users", user.uid), {
+        isPublic: true,
+      });
+
+      // Update local state and UI
+      setFormData((prevFormData) => ({ ...prevFormData, isPublic: true }));
+      setIsPublic(true);
+      console.log("Profile successfully made public.");
+    } catch (error) {
+      console.error("Error making profile public:", error);
+      // Handle errors appropriately (e.g., display an error message to the user)
+    }
+  };
+
+  const makeProfilePrivate = async () => {
+    try {
+      await updateDoc(doc(firebaseDB, "users", user.uid), {
+        isPublic: false,
+      });
+
+      // Update local state and UI
+      setFormData((prevFormData) => ({ ...prevFormData, isPublic: false }));
+      setIsPublic(false);
+      console.log("Profile successfully made private.");
+    } catch (error) {
+      console.error("Error making profile private:", error);
+      // Handle errors appropriately
+    }
+  };
+
   const addHobby = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -150,41 +210,12 @@ const UserInfo = () => {
     }));
   }, [BASE_URL, user.uid]);
 
-  const [isOpen, setIsOpen] = useState(Array(10).fill(false)); // Adjust the array size as needed
+  const [isOpen, setIsOpen] = useState(Array(10).fill(false));
 
-  // Function to toggle the state of a particular component
   const toggleComponent = (index) => {
     setIsOpen((prevOpen) =>
       prevOpen.map((isOpen, i) => (i === index ? !isOpen : false))
     );
-  };
-
-  useEffect(() => {
-    if (user) {
-      const docRef = doc(firebaseDB, "users", user.uid);
-
-      getDoc(docRef)
-        .then((docSnapshot) => {
-          if (docSnapshot.exists()) {
-            setUserDetails(docSnapshot.data());
-            setFormData(docSnapshot.data());
-            fetchUserPhoto(user.uid);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching personal details:", error);
-        });
-    }
-  }, [user]);
-
-  const fetchUserPhoto = async (userId) => {
-    const storageRef = ref(storage, `users/${userId}/profile_photo`);
-    try {
-      const photoUrl = await getDownloadURL(storageRef);
-      setPhoto(photoUrl);
-    } catch (error) {
-      console.error("Error fetching user photo:", error);
-    }
   };
 
   const handleChange = (event) => {
@@ -475,37 +506,6 @@ const UserInfo = () => {
     });
   };
 
-  const makeProfilePublic = async () => {
-    try {
-      await updateDoc(doc(firebaseDB, "users", user.uid), {
-        isPublic: true,
-      });
-
-      // Update local state and UI
-      setFormData((prevFormData) => ({ ...prevFormData, isPublic: true }));
-      setIsPublic(true);
-      console.log("Profile successfully made public.");
-    } catch (error) {
-      console.error("Error making profile public:", error);
-      // Handle errors appropriately (e.g., display an error message to the user)
-    }
-  };
-
-  const makeProfilePrivate = async () => {
-    try {
-      await updateDoc(doc(firebaseDB, "users", user.uid), {
-        isPublic: false,
-      });
-
-      // Update local state and UI
-      setFormData((prevFormData) => ({ ...prevFormData, isPublic: false }));
-      setIsPublic(false);
-      console.log("Profile successfully made private.");
-    } catch (error) {
-      console.error("Error making profile private:", error);
-      // Handle errors appropriately
-    }
-  };
   // Add keyword
   const addKeyword = () => {
     setFormData((prevFormData) => ({
@@ -536,228 +536,199 @@ const UserInfo = () => {
   };
   const headingStyle = `text-4xl font-bold text-center py-3 italic rounded-full cursor-pointer hover:bg-blue-500 hover:text-white`;
   return (
-    <div className="flex flex-col text-xl">
+    <div className="h-full overflow-y-auto flex flex-col text-xl">
       <motion.h1
         initial={{ y: 20, opacity: 0.5 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
         className="text-3xl font-bold text-blue-500 text-center py-12"
       >
-        From Blank Canvas to Masterpiece: Craft Your Portfolio
+        From Blank Canvas to Masterpiece
+        <br />
+        <span className="italic font-semibold text-red-500">Craft Your Portfolio</span>
       </motion.h1>
-
-      {editMode ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col gap-4 bg-indigo-50 shadow-md rounded-lg m-12 p-8"
-        >
-          <div className="flex items-center justify-start gap-8">
-            {photo && (
-              <div>
-                <img
-                  src={photo}
-                  alt="Profile"
-                  className="rounded-lg object-cover max-h-48 w-36 mx-auto"
-                />
-              </div>
-            )}
-            <label className="flex flex-col gap-4 italic text-slate-500">
-              Click "Choose File" to add/update Profile Picture
-              <input
-                type="file"
-                id="photoInput"
-                name="photo"
-                onChange={handleFileChange}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col gap-4 bg-indigo-50 shadow-md rounded-lg m-12 p-8"
+      >
+        <div className="flex items-center justify-start gap-8">
+          {photo && (
+            <div>
+              <img
+                src={photo}
+                alt="Profile"
+                className="rounded-lg object-cover max-h-48 w-36 mx-auto"
               />
-              {selectedFile && (
-                <button
-                  className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
-                  onClick={handlePhotoUpload}
-                  disabled={
-                    uploadStatus === "Uploading..." ||
-                    uploadStatus === "Uploaded!"
-                  }
-                >
-                  {uploadStatus}
-                </button>
-              )}
-            </label>
-          </div>
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-3 p-8 px-12 rounded-lg  min-w-96"
-          >
-            <h1 onClick={() => toggleComponent(0)} className={headingStyle}>
-              Personal Details
-            </h1>
-            {isOpen[0] && (
-              <PersonalDetails
-                formData={formData}
-                setFormData={setFormData}
-                handleChange={handleChange}
-              />
-            )}
-
-            <h1 onClick={() => toggleComponent(2)} className={headingStyle}>
-              Experience Details
-            </h1>
-            {isOpen[2] && (
-              <ExperienceDetails
-                experience={formData.experience}
-                addExperience={addExperience}
-                removeExperience={removeExperience}
-                handleChange={handleExperienceChange}
-              />
-            )}
-
-            <h1 onClick={() => toggleComponent(3)} className={headingStyle}>
-              Professional Details
-            </h1>
-            {isOpen[3] && (
-              // Pass these functions as props to ProfessionalDetails component
-
-              <ProfessionalDetails
-                formData={formData}
-                handleChange={handleChange}
-                addKeyword={addKeyword}
-                removeKeyword={removeKeyword}
-                updateKeyword={updateKeyword}
-              />
-            )}
-
-            <h1 onClick={() => toggleComponent(4)} className={headingStyle}>
-              Skills
-            </h1>
-            {isOpen[4] && (
-              <Skills
-                skills={formData.skills}
-                handleChange={handleSkillChange}
-                addSkill={addSkill}
-                removeSkill={removeSkill}
-                professionalTitle={formData.professionalTitle}
-              />
-            )}
-
-            <h1 onClick={() => toggleComponent(1)} className={headingStyle}>
-              Education
-            </h1>
-            {isOpen[1] && (
-              <EducationDetails
-                education={formData.education}
-                addEducation={addEducation}
-                removeEducation={removeEducation}
-                handleChange={handleEducationChange}
-              />
-            )}
-
-            <h1 onClick={() => toggleComponent(5)} className={headingStyle}>
-              Projects
-            </h1>
-            {isOpen[5] && (
-              <Projects
-                projects={formData.projects}
-                handleProjectChange={handleProjectChange}
-                addProject={addProject}
-                removeProject={removeProject}
-              />
-            )}
-            <h1 onClick={() => toggleComponent(6)} className={headingStyle}>
-              Certifications
-            </h1>
-            {isOpen[6] && (
-              <Certifications
-                certifications={formData.certifications}
-                handleChange={handleCertificationsChange}
-                addCertification={addCertification}
-                removeCertification={removeCertification}
-              />
-            )}
-            <h1 onClick={() => toggleComponent(7)} className={headingStyle}>
-              Testimonials
-            </h1>
-            {isOpen[7] && (
-              <Testimonials
-                testimonials={formData.testimonials}
-                handleChange={handleTestimonialChange}
-                addTestimonial={addTestimonial}
-                removeTestimonial={removeTestimonial}
-              />
-            )}
-            <h1 onClick={() => toggleComponent(8)} className={headingStyle}>
-              Hobbies
-            </h1>
-            {isOpen[8] && (
-              <Hobbies
-                hobbies={formData.hobbies}
-                addHobby={addHobby}
-                removeHobby={removeHobby}
-                updateHobby={updateHobby}
-              />
-            )}
-
-            <div className="flex gap-4 justify-center">
-              <button
-                type="submit"
-                className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
-              >
-                Save Changes
-              </button>
-              <button
-                type="button"
-                className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
-                onClick={() => setEditMode(false)}
-              >
-                Cancel
-              </button>
             </div>
-          </form>
-        </motion.div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col gap-4 bg-indigo-50 shadow-md rounded-lg m-12 p-8"
-        >
-          <div className="flex justify-end items-center gap-4">
+          )}
+          <label className="flex flex-col gap-4 italic text-slate-500">
+            Click "Choose File" to add/update Profile Picture
+            <input
+              type="file"
+              id="photoInput"
+              name="photo"
+              onChange={handleFileChange}
+            />
+            {selectedFile && (
+              <button
+                className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+                onClick={handlePhotoUpload}
+                disabled={
+                  uploadStatus === "Uploading..." ||
+                  uploadStatus === "Uploaded!"
+                }
+              >
+                {uploadStatus}
+              </button>
+            )}
+          </label>
+          {formData.isPublic ? (
             <button
               className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
-              onClick={() => {
-                setEditMode(true);
-              }}
+              onClick={makeProfilePrivate}
             >
-              Edit
+              Make Profile Private
             </button>
-
-            {formData.isPublic ? (
-              <button
-                className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
-                onClick={makeProfilePrivate}
-              >
-                Make Profile Private
-              </button>
-            ) : (
-              <button
-                className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
-                onClick={makeProfilePublic}
-              >
-                Make Profile Public
-              </button>
-            )}
-          </div>
-
-          {userDetails ? (
-            <UserDetails userDetails={userDetails} photo={photo} />
           ) : (
-            <p className="text-lg font-medium text-gray-700 text-center">
-              It seems you haven't added any information. Click on Edit and add
-              now
-            </p>
+            <button
+              className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
+              onClick={makeProfilePublic}
+            >
+              Make Profile Public
+            </button>
           )}
-        </motion.div>
-      )}
+        </div>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-3 p-8 px-12 rounded-lg  min-w-96"
+        >
+          <h1 onClick={() => toggleComponent(0)} className={headingStyle}>
+            Personal Details
+          </h1>
+          {isOpen[0] && (
+            <PersonalDetails
+              formData={formData}
+              setFormData={setFormData}
+              handleChange={handleChange}
+            />
+          )}
+
+          <h1 onClick={() => toggleComponent(2)} className={headingStyle}>
+            Experience Details
+          </h1>
+          {isOpen[2] && (
+            <ExperienceDetails
+              experience={formData.experience}
+              addExperience={addExperience}
+              removeExperience={removeExperience}
+              handleChange={handleExperienceChange}
+            />
+          )}
+
+          <h1 onClick={() => toggleComponent(3)} className={headingStyle}>
+            Professional Details
+          </h1>
+          {isOpen[3] && (
+            // Pass these functions as props to ProfessionalDetails component
+
+            <ProfessionalDetails
+              formData={formData}
+              handleChange={handleChange}
+              addKeyword={addKeyword}
+              removeKeyword={removeKeyword}
+              updateKeyword={updateKeyword}
+            />
+          )}
+
+          <h1 onClick={() => toggleComponent(4)} className={headingStyle}>
+            Skills
+          </h1>
+          {isOpen[4] && (
+            <Skills
+              skills={formData.skills}
+              handleChange={handleSkillChange}
+              addSkill={addSkill}
+              removeSkill={removeSkill}
+              professionalTitle={formData.professionalTitle}
+            />
+          )}
+
+          <h1 onClick={() => toggleComponent(1)} className={headingStyle}>
+            Education
+          </h1>
+          {isOpen[1] && (
+            <EducationDetails
+              education={formData.education}
+              addEducation={addEducation}
+              removeEducation={removeEducation}
+              handleChange={handleEducationChange}
+            />
+          )}
+
+          <h1 onClick={() => toggleComponent(5)} className={headingStyle}>
+            Projects
+          </h1>
+          {isOpen[5] && (
+            <Projects
+              projects={formData.projects}
+              handleProjectChange={handleProjectChange}
+              addProject={addProject}
+              removeProject={removeProject}
+            />
+          )}
+          <h1 onClick={() => toggleComponent(6)} className={headingStyle}>
+            Certifications
+          </h1>
+          {isOpen[6] && (
+            <Certifications
+              certifications={formData.certifications}
+              handleChange={handleCertificationsChange}
+              addCertification={addCertification}
+              removeCertification={removeCertification}
+            />
+          )}
+          <h1 onClick={() => toggleComponent(7)} className={headingStyle}>
+            Testimonials
+          </h1>
+          {isOpen[7] && (
+            <Testimonials
+              testimonials={formData.testimonials}
+              handleChange={handleTestimonialChange}
+              addTestimonial={addTestimonial}
+              removeTestimonial={removeTestimonial}
+            />
+          )}
+          <h1 onClick={() => toggleComponent(8)} className={headingStyle}>
+            Hobbies
+          </h1>
+          {isOpen[8] && (
+            <Hobbies
+              hobbies={formData.hobbies}
+              addHobby={addHobby}
+              removeHobby={removeHobby}
+              updateHobby={updateHobby}
+            />
+          )}
+
+          <div className="flex gap-4 justify-center">
+            <button
+              type="submit"
+              className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
+            >
+              Save Changes
+            </button>
+            <button
+              type="button"
+              className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
+              onClick={() => setEditMode(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </motion.div>
     </div>
   );
 };
