@@ -96,7 +96,7 @@ const Projects = ({
           </label>
           <div className="col-span-2 flex justify-center items-center">
             <button
-              className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+              className="bg-button text-white font-semibold p-2 rounded-lg px-4"
               type="button"
               onClick={() => removeProject(index)}
             >
@@ -106,7 +106,7 @@ const Projects = ({
         </div>
       ))}
       <button
-        className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
         type="button"
         onClick={() => addProject()}
       >

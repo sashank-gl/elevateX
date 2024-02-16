@@ -62,10 +62,10 @@ const Search = () => {
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
           placeholder="Search by Email"
-          className="py-3 px-6 w-96 rounded-full ring-2 focus:outline-none ring-blue-400 focus:ring-blue-500 ring-inset"
+          className="py-3 px-6 w-96 rounded-full ring-2 focus:outline-none ring-stroke focus:ring-stroke ring-inset"
         />
         <button
-          className="bg-blue-500 text-white font-semibold rounded-full p-3 text-2xl"
+          className="bg-stroke text-highlight font-semibold rounded-full p-3 text-2xl"
           type="submit"
         >
           <IoSearch />
@@ -76,7 +76,7 @@ const Search = () => {
               {searchResults.map((user) => (
                 <a className="" href={user.uniqueUrl} onClick={()=>{setSearchResults([])}}>
                   <li
-                    className="rounded-full py-5 font-semibold px-6 w-96 hover:text-white hover:bg-blue-500 bg-blue-300"
+                    className="rounded-full py-5 font-semibold px-6 w-96 text-highlight hover:bg-stroke bg-stroke/80"
                     key={user.id}
                   >
                     {user.name}

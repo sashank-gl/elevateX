@@ -85,7 +85,7 @@ const ProfessionalDetails = ({
               onChange={(e) => updateKeyword(index, e.target.value)}
             />
             <button
-              className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+              className="bg-button text-white font-semibold p-2 rounded-lg px-4"
               type="button"
               onClick={() => removeKeyword(index)}
             >
@@ -94,7 +94,7 @@ const ProfessionalDetails = ({
           </div>
         ))}
         <button
-          className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+          className="bg-button text-white font-semibold p-2 rounded-lg px-4"
           type="button"
           onClick={addKeyword}
         >

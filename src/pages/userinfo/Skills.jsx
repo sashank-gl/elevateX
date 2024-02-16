@@ -47,7 +47,7 @@ const Skills = ({ skills, handleChange, addSkill, removeSkill }) => {
             />
           </label>
           <button
-            className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+            className="bg-button text-white font-semibold p-2 rounded-lg px-4"
             type="button"
             onClick={() => removeSkill(index)}
           >
@@ -56,7 +56,7 @@ const Skills = ({ skills, handleChange, addSkill, removeSkill }) => {
         </div>
       ))}
       <button
-        className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
         type="button"
         onClick={addSkill}
       >

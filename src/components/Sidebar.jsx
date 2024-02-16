@@ -35,8 +35,8 @@ const Sidebar = () => {
   return (
     <div className="h-screen p-4 flex flex-col justify-between">
       <div>
-        <motion.h1 className="text-3xl font-extrabold text-blue-500">
-          Elevate<span className="text-red-500">X</span>
+        <motion.h1 className="text-3xl font-extrabold ">
+          Elevate<span className="text-tertiary">X</span>
         </motion.h1>
         <div className="flex flex-col justify-center items-center p-4 gap-6">
           {photo && (
@@ -51,7 +51,7 @@ const Sidebar = () => {
             </div>
           )}
           <Link
-            className="text-xl text-blue-500 font-bold hover:underline"
+            className="text-xl  font-bold hover:underline"
             to={`/${user.uid}`}
           >
             View My Portfolio
@@ -59,37 +59,38 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 text-blue-500 font-semibold">
+      <div className="flex flex-col gap-3  font-semibold">
         <Link
           to="/"
-          className="hover:bg-gradient-to-l from-blue-500 from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
         >
           Home
         </Link>
         <Link
           to="/profile"
-          className="hover:bg-gradient-to-l from-blue-500 from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
         >
           My Profile
         </Link>
         <Link
           to="/edit-profile"
-          className="hover:bg-gradient-to-l from-blue-500 from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
         >
           Edit Profile
         </Link>
+       
         <Link
           to="/templates"
-          className="hover:bg-gradient-to-l from-blue-500 from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
         >
           Templates
         </Link>
-        <Link className="hover:bg-gradient-to-l from-blue-500 from-50% rounded-r-full py-2 px-6 text-center hover:text-white">
+        <Link className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white">
           Settings
         </Link>
         <button
           onClick={handleSignOutWithGoogle}
-          className="hover:bg-gradient-to-l from-blue-500 from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
         >
           Sign Out
         </button>

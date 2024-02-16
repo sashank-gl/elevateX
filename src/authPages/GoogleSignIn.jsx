@@ -52,10 +52,10 @@ const GoogleSignIn = () => {
       initial="hidden"
       animate="visible"
       variants={parentVariants}
-      className="h-screen flex"
+      className="h-screen flex text-paragraph"
     >
       {/* Left Section - Benefits and Features */}
-      <motion.div className="w-1/2 flex flex-col text-center justify-center items-center bg-blue-500 text-white gap-6 p-10">
+      <motion.div className="w-1/2 flex flex-col text-center justify-center items-center bg-paragraph text-background gap-6 p-10">
         <motion.h2 variants={childVariants} className="text-4xl font-bold mb-6">
           Why ElevateX?
         </motion.h2>
@@ -112,7 +112,7 @@ const GoogleSignIn = () => {
       <motion.div
         initial={{ y: -200 }}
         animate={{ y: 0 }}
-        className="w-1/2 flex flex-col justify-center items-center bg-white p-10"
+        className="w-1/2 flex flex-col justify-center items-center bg-background p-10"
         transition={{ duration: 1 }}
       >
         <h1 className="text-4xl font-bold mb-8">
@@ -121,7 +121,7 @@ const GoogleSignIn = () => {
         <h2 className="text-2xl mb-12">Join ElevateX Now</h2>
         <button
           onClick={handleSignInWithGoogle}
-          className="w-80 h-16 bg-red-500 text-white text-xl font-semibold rounded-lg hover:bg-red-600 transition duration-300"
+          className="w-80 h-16 bg-button text-background text-xl font-semibold rounded-lg hover:bg-red-600 transition duration-300"
         >
           Sign In With Google
         </button>

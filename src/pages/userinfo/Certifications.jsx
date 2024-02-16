@@ -82,7 +82,7 @@ const Certifications = ({
             />
           </label>
           <button
-            className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+            className="bg-button text-white font-semibold p-2 rounded-lg px-4"
             type="button"
             onClick={() => removeCertification(index)}
           >
@@ -91,7 +91,7 @@ const Certifications = ({
         </div>
       ))}
       <button
-        className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
         type="button"
         onClick={addCertification}
       >

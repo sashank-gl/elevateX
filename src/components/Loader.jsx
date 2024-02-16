@@ -7,7 +7,7 @@ const Loader = () => {
         rotate: [0, 90, 180, 90, 0],
         scale: [1, 1.5, 2, 1.5, 1],
         borderRadius: ["0%", "0%", "50%", "50%", "0%"],
-        backgroundColor: ["#ef4444", "#22c55e", "#3b82f6", "#eab308"],
+        backgroundColor: ["#f582ae", "#001858", "#8bd3dd"],
       }}
       transition={{
         duration: 3,

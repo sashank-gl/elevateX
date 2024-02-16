@@ -16,7 +16,7 @@ const Hobbies = ({ hobbies, addHobby, removeHobby, updateHobby }) => {
           />
 
           <button
-            className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+            className="bg-button text-white font-semibold p-2 rounded-lg px-4"
             type="button"
             onClick={() => removeHobby(index)}
           >
@@ -25,7 +25,7 @@ const Hobbies = ({ hobbies, addHobby, removeHobby, updateHobby }) => {
         </div>
       ))}
       <button
-        className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
         type="button"
         onClick={addHobby}
       >

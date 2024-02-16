@@ -92,7 +92,7 @@ const EducationDetails = ({
           {/* Similar input fields for other education details */}
           <div className="col-span-2 flex justify-center items-center">
             <button
-              className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+              className="bg-button text-white font-semibold p-2 rounded-lg px-4"
               type="button"
               onClick={() => removeEducation(index)}
             >
@@ -102,7 +102,7 @@ const EducationDetails = ({
         </div>
       ))}
       <button
-        className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
         type="button"
         onClick={addEducation}
       >

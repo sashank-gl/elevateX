@@ -48,13 +48,13 @@ const AllTemplates = () => {
               <div className="flex gap-4 pb-4">
                 <div
                   onClick={() => handleTemplateClick(template)}
-                  className="cursor-pointer bg-red-500 rounded-lg py-2 px-4 text-white font-semibold"
+                  className="cursor-pointer bg-button rounded-lg py-2 px-4 text-white font-semibold"
                 >
                   Preview
                 </div>
                 <div
                   onClick={() => handleTemplateClick(template)}
-                  className="cursor-pointer bg-red-500 rounded-lg py-2 px-4 text-white font-semibold"
+                  className="cursor-pointer bg-button rounded-lg py-2 px-4 text-white font-semibold"
                 >
                   Select
                 </div>

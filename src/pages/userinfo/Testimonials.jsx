@@ -45,7 +45,7 @@ const Testimonials = ({
             onChange={(e) => handleChange(index, "company", e.target.value)}
           />
           <button
-            className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+            className="bg-button text-white font-semibold p-2 rounded-lg px-4"
             type="button"
             onClick={() => removeTestimonial(index)}
           >
@@ -54,7 +54,7 @@ const Testimonials = ({
         </div>
       ))}
       <button
-        className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
         type="button"
         onClick={addTestimonial}
       >

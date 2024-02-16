@@ -534,24 +534,15 @@ const UserInfo = () => {
       keywords: updatedKeywords,
     }));
   };
-  const headingStyle = `text-4xl font-bold text-center py-3 italic rounded-full cursor-pointer hover:bg-blue-500 hover:text-white`;
+  const headingStyle = `text-4xl font-bold text-center py-3 italic rounded-full cursor-pointer hover:bg-stroke hover:text-white`;
   return (
     <div className="h-full overflow-y-auto flex flex-col text-xl">
-      <motion.h1
-        initial={{ y: 20, opacity: 0.5 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="text-3xl font-bold text-blue-500 text-center py-12"
-      >
-        From Blank Canvas to Masterpiece
-        <br />
-        <span className="italic font-semibold text-red-500">Craft Your Portfolio</span>
-      </motion.h1>
+      
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col gap-4 bg-indigo-50 shadow-md rounded-lg m-12 p-8"
+        className="flex flex-col gap-4  shadow-md rounded-lg m-12 p-8"
       >
         <div className="flex items-center justify-start gap-8">
           {photo && (
@@ -573,7 +564,7 @@ const UserInfo = () => {
             />
             {selectedFile && (
               <button
-                className="bg-red-500 text-white font-semibold p-2 rounded-lg px-4"
+                className="bg-button text-highlight font-semibold p-2 rounded-lg px-4"
                 onClick={handlePhotoUpload}
                 disabled={
                   uploadStatus === "Uploading..." ||
@@ -586,14 +577,14 @@ const UserInfo = () => {
           </label>
           {formData.isPublic ? (
             <button
-              className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
+              className="bg-stroke p-2 px-4 text-highlight font-semibold rounded-lg"
               onClick={makeProfilePrivate}
             >
               Make Profile Private
             </button>
           ) : (
             <button
-              className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
+              className="bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
               onClick={makeProfilePublic}
             >
               Make Profile Public
@@ -715,13 +706,13 @@ const UserInfo = () => {
           <div className="flex gap-4 justify-center">
             <button
               type="submit"
-              className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
+              className="bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
             >
               Save Changes
             </button>
             <button
               type="button"
-              className="bg-blue-500 p-2 px-4 text-white font-semibold rounded-lg"
+              className="bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
               onClick={() => setEditMode(false)}
             >
               Cancel
