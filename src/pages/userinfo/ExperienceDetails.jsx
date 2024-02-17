@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 
 const ExperienceDetails = ({
   experience,
   addExperience,
   removeExperience,
   handleChange,
+  addResponsibility,
+  removeResponsibility,
+  handleResponsibilityChange,
 }) => {
+  const [isPresentCompany, setIsPresentCompany] = useState(false);
+
   const labelStyle = "flex gap-4 my-1";
   const labelTextStyle = "my-1 w-40";
   const inputStyle = "h-10 rounded-lg p-1";
+
+  const togglePresentCompany = (index) => {
+    const updatedExperience = [...experience];
+    updatedExperience[index].isPresentCompany =
+      !updatedExperience[index].isPresentCompany;
+  };
 
   return (
     <div>
@@ -46,27 +57,56 @@ const ExperienceDetails = ({
               onChange={(e) => handleChange(index, "startDate", e.target.value)}
             />
           </label>
-          <label className={labelStyle}>
-            <span className={labelTextStyle}>End Date (optional):</span>
+          <div className="flex items-center my-4">
             <input
-              className={inputStyle}
-              type="date"
-              name={`experience[${index}].endDate`}
-              value={exp.endDate}
-              onChange={(e) => handleChange(index, "endDate", e.target.value)}
+              type="checkbox"
+              checked={exp.isPresentCompany}
+              onChange={() => togglePresentCompany(index)}
+              className="mr-2 w-6 h-6 cursor-pointer"
             />
-          </label>
-          <label className={`${labelStyle} flex-col col-span-2`}>
+            <span>Present Company</span>
+          </div>
+          {!isPresentCompany && (
+            <label className={labelStyle}>
+              <span className={labelTextStyle}>End Date (optional):</span>
+              <input
+                className={inputStyle}
+                type="date"
+                name={`experience[${index}].endDate`}
+                value={exp.endDate}
+                onChange={(e) => handleChange(index, "endDate", e.target.value)}
+              />
+            </label>
+          )}
+          <div className={`${labelStyle} flex-col col-span-2`}>
             <span className={`my-1`}>Responsibilities:</span>
-            <textarea
-              name={`experience[${index}].responsibilities`}
-              value={exp.responsibilities}
-              onChange={(e) =>
-                handleChange(index, "responsibilities", e.target.value)
-              }
-              className="rounded-lg min-h-36"
-            />
-          </label>
+            {exp.responsibilities.map((responsibility, respIndex) => (
+              <div key={respIndex} className="flex">
+                <input
+                  name={`experience[${index}].responsibilities[${respIndex}]`}
+                  value={responsibility}
+                  onChange={(e) =>
+                    handleResponsibilityChange(index, respIndex, e.target.value)
+                  }
+                  className="rounded-lg"
+                />
+                <button
+                  className="bg-red-500 text-white font-semibold p-2 rounded-lg ml-2"
+                  type="button"
+                  onClick={() => removeResponsibility(index, respIndex)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              className="bg-green-500 text-white font-semibold p-2 rounded-lg mt-2"
+              type="button"
+              onClick={() => addResponsibility(index)}
+            >
+              Add Responsibility
+            </button>
+          </div>
 
           <label className={`${labelStyle} flex-col col-span-2`}>
             <span className={`my-1`}>Skills:</span>

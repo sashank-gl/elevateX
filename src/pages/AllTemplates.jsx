@@ -8,16 +8,18 @@ const AllTemplates = () => {
   const { user } = UserAuth();
   const [templates, setTemplates] = useState([]);
   const [templateId, setTemplateId] = useState("monochromatic");
+  const [filteredTemplates, setFilteredTemplates] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
     // Fetch templates from Firebase or a local data source
     // Assuming a local array of templates for now
-    setTemplates([
-      { id: "monochromatic", name: "Monochromatic" },
-      { id: "minimalist", name: "Minimalist" },
-      { id: "vibrant", name: "Vibrant" },
-      { id: "vibrant", name: "Vibrant" },
-    ]);
+    const fetchedTemplates = [
+      { id: "monochromatic", name: "Monochromatic", category: "monochrome" },
+      { id: "arctic-breeze", name: "Arctic Breeze", category: "fresher" },
+    ];
+    setTemplates(fetchedTemplates);
+    setFilteredTemplates(fetchedTemplates);
   }, []);
 
   const handleTemplateClick = (template) => {
@@ -30,28 +32,72 @@ const AllTemplates = () => {
     });
   };
 
+  useEffect(() => {
+    if (selectedCategory === "all") {
+      setFilteredTemplates(templates);
+    } else {
+      const filtered = templates.filter(
+        (template) => template.category === selectedCategory
+      );
+      setFilteredTemplates(filtered);
+    }
+  }, [selectedCategory, templates]);
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
   return (
-    <div>
+    <div className="p-12">
       <div>
-        <div className="flex py-3 gap-6 font-semibold">
-          <div>Free</div>
-          <div>Paid</div>
-          <div>Purchased</div>
+        <div className="flex items-center gap-4 mb-4">
+          <button
+            onClick={() => handleCategoryChange("frontend")}
+            className="px-4 py-2 bg-main text-heading font-semibold rounded-lg"
+          >
+            Frontend
+          </button>
+          <button
+            onClick={() => handleCategoryChange("backend")}
+            className="px-4 py-2 bg-main text-heading font-semibold rounded-lg"
+          >
+            Backend
+          </button>
+          <button
+            onClick={() => handleCategoryChange("fresher")}
+            className="px-4 py-2 bg-main text-heading font-semibold rounded-lg"
+          >
+            Fresher
+          </button>
+          <button
+            onClick={() => handleCategoryChange("monochrome")}
+            className="px-4 py-2 bg-main text-heading font-semibold rounded-lg"
+          >
+            Monochrome
+          </button>
+          <select
+            value={selectedCategory}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+            className="px-4 py-2 rounded-lg border bg-main text-heading font-semibold border-main focus:outline-none focus:ring-2 focus:ring-stroke"
+          >
+            <option value="all">All Categories</option>
+            <option value="frontend">Frontend</option>
+            <option value="backend">Backend</option>
+            <option value="monochrome">Monochrome</option>
+            <option value="fresher">Fresher</option>
+          </select>
         </div>
-        <div className="grid grid-cols-3 gap-5">
-          {templates.map((template) => (
-            <div
-              key={template.id}
-              className="flex flex-col gap-3 items-center justify-between shadow-lg w-96 h-64"
-            >
-              <div className="mt-20 text-3xl font-semibold text-blue-500">{template.name}</div>
-              <div className="flex gap-4 pb-4">
-                <div
-                  onClick={() => handleTemplateClick(template)}
-                  className="cursor-pointer bg-button rounded-lg py-2 px-4 text-white font-semibold"
-                >
-                  Preview
-                </div>
+
+        {filteredTemplates.length === 0 ? (
+          <div className="text-center h-96 text-2xl font-semibold flex items-center justify-center">No results found</div>
+        ) : (
+          <div className="grid gap-5">
+            {filteredTemplates.map((template) => (
+              <div
+                key={template.id}
+                className="flex flex-col gap-8 items-center justify-between bg-main p-3 px-6 rounded-lg"
+              >
+                <div className="text-3xl font-semibold">{template.name}</div>
                 <div
                   onClick={() => handleTemplateClick(template)}
                   className="cursor-pointer bg-button rounded-lg py-2 px-4 text-white font-semibold"
@@ -59,9 +105,9 @@ const AllTemplates = () => {
                   Select
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

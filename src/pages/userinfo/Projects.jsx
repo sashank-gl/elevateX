@@ -14,7 +14,6 @@ const Projects = ({
 
   return (
     <div>
-      <h1 className="text-2xl">Projects:</h1>
       {projects.map((project, index) => (
         <div key={index} className="grid grid-cols-2 mb-4 gap-4">
           <label className={labelStyle}>

@@ -16,6 +16,19 @@ module.exports = {
       secondary: "#8bd3dd",
       tertiary: "#f582ae",
 
+      // Arctic Breeze
+
+      abreeze: {
+        background: "#fffffe",
+        paragraph: "#5f6c7b",
+        highlight: "#3da9fc",
+        button: "#3da9fc",
+        buttonText: "#fffffe",
+        stroke: "#094067",
+        secondary: "#90b4ce",
+        tertiary: "#ef4565",
+      },
+
       // Default
       black: colors.black,
       white: colors.white,

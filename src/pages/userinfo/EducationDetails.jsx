@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const EducationDetails = ({
   education,
@@ -58,16 +58,35 @@ const EducationDetails = ({
               onChange={(e) => handleChange(index, "startDate", e.target.value)}
             />
           </label>
-          <label className={labelStyle}>
-            <span className={labelTextStyle}>End Date:</span>
+          <div className="flex items-center my-4">
             <input
-              className={inputStyle}
-              type="date"
-              name={`education[${index}].endDate`}
-              value={edu.endDate}
-              onChange={(e) => handleChange(index, "endDate", e.target.value)}
+              type="checkbox"
+              checked={edu.isPresentCollege}
+              onChange={() => {
+                edu.isPresentCollege = !edu.isPresentCollege;
+                handleChange(index, "isPresentCollege", edu.isPresentCollege);
+                // Clear end date when checkbox is checked
+                if (edu.isPresentCollege) {
+                  edu.endDate = ""; // Set end date to an empty string
+                }
+              }}
+              className="mr-2 w-6 h-6 cursor-pointer"
             />
-          </label>
+            <span>Currently Studying Here?</span>
+          </div>
+          {/* Conditionally render end date input */}
+          {!edu.isPresentCollege && (
+            <label className={labelStyle}>
+              <span className={labelTextStyle}>End Date:</span>
+              <input
+                className={inputStyle}
+                type="date"
+                name={`education[${index}].endDate`}
+                value={edu.endDate}
+                onChange={(e) => handleChange(index, "endDate", e.target.value)}
+              />
+            </label>
+          )}
           <label className={labelStyle}>
             <span className={labelTextStyle}>GPA:</span>
             <input

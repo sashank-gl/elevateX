@@ -5,7 +5,16 @@ import { motion } from "framer-motion";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { firebaseDB, storage } from "../firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
+import { TiTick } from "react-icons/ti";
+import {
+  FaFacebookF,
+  FaGithub,
+  FaInstagram,
+  FaLinkedin,
+  FaStackOverflow,
+  FaWhatsapp,
+} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 const UserDetails = () => {
   const { user } = UserAuth();
   const [userDetails, setUserDetails] = useState(null);
@@ -37,7 +46,8 @@ const UserDetails = () => {
     }
   }, [user]);
 
-  const headingStyle = `font-bold text-2xl`;
+  const headingStyle = `font-bold text-2xl mb-4`;
+  const titleStyle = `font-semibold text-xl`;
 
   return (
     <div className="p-6">
@@ -54,7 +64,7 @@ const UserDetails = () => {
           </div>
 
           <div className="flex gap-4">
-            <div className="w-1/3 bg-main p-4 rounded-lg flex flex-col gap-4">
+            <div className="w-1/3 bg-main p-4 rounded-lg flex flex-col gap-8">
               <div>
                 {userDetails.contacts.email && (
                   <p>{userDetails.contacts.email}</p>
@@ -63,21 +73,48 @@ const UserDetails = () => {
                   <p>{userDetails.contacts.phoneNumber}</p>
                 )}
                 {userDetails.location && <p>{userDetails.location}</p>}
-
+              </div>
+              {/* Social Media */}
+              <div className="grid grid-cols-4 gap-6 text-2xl">
                 {userDetails.contacts.linkedIn && (
-                  <a href={userDetails.contacts.linkedIn}>LinkedIn</a>
+                  <a href={userDetails.contacts.linkedIn}>
+                    <FaLinkedin />
+                  </a>
                 )}
 
                 {userDetails.contacts.gitHub && (
-                  <a href={userDetails.contacts.gitHub}>GitHub</a>
+                  <a href={userDetails.contacts.gitHub}>
+                    <FaGithub />
+                  </a>
                 )}
                 {userDetails.contacts.stackoverflow && (
                   <a href={userDetails.contacts.stackoverflow}>
-                    Stack Overflow
+                    <FaStackOverflow />
+                  </a>
+                )}
+                {userDetails.contacts.whatsApp && (
+                  <a href={`https://wa.me/${userDetails.contacts.whatsApp}`}>
+                    <FaWhatsapp />
+                  </a>
+                )}
+                {userDetails.contacts.twitter && (
+                  <a href={userDetails.contacts.twitter}>
+                    <FaXTwitter />
+                  </a>
+                )}
+                {userDetails.contacts.facebook && (
+                  <a href={userDetails.contacts.facebook}>
+                    <FaFacebookF />
+                  </a>
+                )}
+                {userDetails.contacts.instagram && (
+                  <a href={userDetails.contacts.instagram}>
+                    <FaInstagram />
                   </a>
                 )}
               </div>
 
+              {/* Skills */}
               <div>
                 {userDetails.skills && (
                   <div className="mb-4">
@@ -87,7 +124,7 @@ const UserDetails = () => {
                         <div key={skill} className="mb-2">
                           <p>{skill.name}</p>
 
-                          <div className="h-2 w-48 bg-gray-200 rounded">
+                          <div className="h-2 w-48 bg-background rounded">
                             <div
                               className={`h-full rounded bg-stroke`}
                               style={{
@@ -109,13 +146,12 @@ const UserDetails = () => {
                 )}
               </div>
 
+              {/* Hobbies */}
               <div>
                 {userDetails.hobbies && (
                   <div className="mb-4">
-                    <h5 className="font-semibold text-gray-700 mb-2">
-                      Hobbies:
-                    </h5>
-                    <p className="list-disc pl-3 text-gray-700">
+                    <h5 className="font-semibold  mb-2">Hobbies:</h5>
+                    <p className="list-disc pl-3 ">
                       {userDetails.hobbies.map((hobby) => (
                         <p key={hobby}>{hobby}</p>
                       ))}
@@ -124,33 +160,58 @@ const UserDetails = () => {
                 )}
               </div>
             </div>
+
+            {/* Experience */}
             <div className="w-2/3 bg-main p-4 rounded-lg flex flex-col gap-4">
               <div>
                 {userDetails.experience && (
-                  <div className="mb-4">
-                    <h5 className="font-semibold text-gray-700 mb-2">
-                      Experience:
-                    </h5>
-                    <div className="list-disc pl-3 text-gray-700">
-                      {userDetails.experience.map((exp) => (
-                        <p key={exp.id || exp.companyName}>
-                          <h1 className="font-bold text-2xl">{exp.position}</h1>
-                          <h1 className="font-bold text-xl">
-                            {exp.companyName}
-                          </h1>
-                          <div className="flex justify-between">
-                            <p>
-                              {formatDate(exp.startDate)} -{" "}
-                              {formatDate(exp.endDate) || "Present"}
-                            </p>
-                            <p> {exp.location}</p>
+                  <div className="">
+                    <h5 className={headingStyle}>Experience:</h5>
+                    <div className="pl-3">
+                      {userDetails.experience
+                        .sort(
+                          (a, b) =>
+                            new Date(b.startDate) - new Date(a.startDate)
+                        )
+                        .map((exp, index, array) => (
+                          <div
+                            key={exp.id || exp.companyName}
+                            className={`mb-3 ${
+                              index !== array.length - 1
+                                ? "pb-3 border-b border-stroke/50"
+                                : ""
+                            }`}
+                          >
+                            <h1 className={titleStyle}>
+                              {exp.position}, {exp.companyName}
+                            </h1>
+                            <div className="flex justify-between">
+                              <p className="italic">
+                                {formatDate(exp.startDate)} -{" "}
+                                {exp.endDate === ""
+                                  ? "Present"
+                                  : formatDate(exp.endDate)}
+                              </p>
+                              <p> {exp.location}</p>
+                            </div>
+                            {exp.responsibilities &&
+                              exp.responsibilities.map(
+                                (responsibility, respIndex) => (
+                                  <div
+                                    key={respIndex}
+                                    className="flex items-center gap-3"
+                                  >
+                                    <p className="text-xl">
+                                      <TiTick />
+                                    </p>
+                                    <p>{responsibility}</p>
+                                  </div>
+                                )
+                              )}
+
+                            {exp.skills && <p>{exp.skills}</p>}
                           </div>
-                          {exp.responsibilities && (
-                            <p>{exp.responsibilities}</p>
-                          )}
-                          {exp.skills && <p>{exp.skills}</p>}
-                        </p>
-                      ))}
+                        ))}
                     </div>
                   </div>
                 )}
@@ -159,73 +220,35 @@ const UserDetails = () => {
               <div>
                 {userDetails.education && (
                   <div className="mb-4">
-                    <h5 className="font-semibold text-gray-700 mb-2">
-                      Education:
-                    </h5>
-                    <ul className="list-disc pl-3 text-gray-700">
-                      {userDetails.education.map((edu) => (
-                        <li key={edu.id || edu.institution}>
-                          <h1 className="font-bold text-2xl">{edu.degree}</h1>
-                          <h1 className="font-bold text-xl">
-                            {edu.institution}
-                          </h1>
-                          <p>{edu.fieldOfStufy}</p>
-                          <p>
-                            {edu.startDate} - {edu.endDate || "Present"}
-                          </p>
-                          <p>{edu.gpa}</p>
-                          {edu.description && <p>{edu.description}</p>}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              <div>
-                {userDetails.projects && (
-                  <div className="mb-4">
-                    <h5 className="font-semibold mb-2">Projects:</h5>
-                    <div className="flex flex-col gap-6">
-                      {userDetails.projects.map((project) => (
-                        <div
-                          key={project.id}
-                          className="border-4 border-highlight rounded-lg p-3"
-                        >
-                          <p className="font-bold text-2xl">{project.name}</p>
-                          <p className="my-2">{project.description}</p>
-                          {project.features && (
-                            <div>
-                              <p>Features:</p>
-                              <p>{project.features}</p>
-                            </div>
-                          )}
-                          <p>{project.stack}</p>
-                          <p>{project.startDate}</p>
-                          <p>{project.endDate}</p>
-                          <div className="flex justify-around">
-                            <a href={project.projectUrl}>View Project</a>
-                            <a href={project.repositoryUrl}>View Code</a>
+                    <h5 className={headingStyle}>Education:</h5>
+                    <div className="pl-3 ">
+                      {userDetails.education
+                        .sort(
+                          (a, b) =>
+                            new Date(b.startDate) - new Date(a.startDate)
+                        )
+                        .map((edu, index, array) => (
+                          <div
+                            key={edu.id || edu.institution}
+                            className={`mb-3 ${
+                              index !== array.length - 1
+                                ? "pb-3 border-b border-stroke/50"
+                                : ""
+                            }`}
+                          >
+                            <h1 className={titleStyle}>{edu.degree}</h1>
+                            <h1 className={titleStyle}>{edu.institution}</h1>
+                            <p>{edu.fieldOfStufy}</p>
+                            <p className="italic">
+                              {formatDate(edu.startDate)} -{" "}
+                              {edu.endDate === ""
+                                ? "Present"
+                                : formatDate(edu.endDate)}
+                            </p>
+                            <p>{edu.gpa}</p>
+                            {edu.description && <p>{edu.description}</p>}
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div>
-                {userDetails.certifications && (
-                  <div className="mb-4">
-                    <h5 className="font-semibold text-gray-700 mb-2">
-                      Certifications:
-                    </h5>
-                    <div>
-                      {userDetails.certifications.map((certification) => (
-                        <p key={certification.name}>
-                          <p>{certification.name}</p>
-                        </p>
-                      ))}
+                        ))}
                     </div>
                   </div>
                 )}
@@ -234,31 +257,94 @@ const UserDetails = () => {
           </div>
 
           <div className="bg-main p-4 rounded-lg flex flex-col gap-4">
-            <h1>Other Information</h1>
             <div>
-              {userDetails.contacts.whatsApp && (
-                <a href={`https://wa.me/${userDetails.contacts.whatsApp}`}>
-                  WhatsApp
-                </a>
+              {userDetails.projects && (
+                <div className="mb-4">
+                  <h5 className={headingStyle}>Projects:</h5>
+                  <div className="flex flex-col gap-6">
+                    {userDetails.projects.map((project) => (
+                      <div
+                        key={project.id}
+                        className="border-4 border-highlight rounded-lg p-3"
+                      >
+                        <div className="flex justify-between">
+                          <p className={titleStyle}>{project.name}</p>
+                          <div className="flex">
+                            {project.startDate && project.endDate && (
+                              <p className="italic">
+                                {formatDate(project.startDate)} -{" "}
+                                {formatDate(project.endDate)}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <p className="my-2">{project.description}</p>
+                        <p>{project.stack}</p>
+
+                        <div className="flex justify-around">
+                          <a
+                            href={project.projectUrl}
+                            className="bg-stroke py-2 px-4 rounded-lg text-highlight"
+                          >
+                            View Project
+                          </a>
+                          <a
+                            href={project.repositoryUrl}
+                            className="bg-stroke py-2 px-4 rounded-lg text-highlight"
+                          >
+                            View Code
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
-              {userDetails.contacts.twitter && (
-                <a href={userDetails.contacts.twitter}>Twitter</a>
+            </div>
+
+            <div>
+              {userDetails.certifications && (
+                <div className="mb-4">
+                  <h5 className={headingStyle}>Certifications:</h5>
+                  <div>
+                    {userDetails.certifications.map((certification) => (
+                      <div key={certification.name} className="flex flex-col gap-1">
+                        <p className={titleStyle}>{certification.name}</p>
+                        <p className="italic">
+                          issued by {certification.issuedBy} on{" "}
+                          {formatDate(certification.certificationDate)}
+                        </p>
+                        <p>{certification.description}</p>
+                        {certification.expiry && (
+                          <p className="italic">
+                            expires on {formatDate(certification.expiry)}
+                          </p>
+                        )}
+                        <div className="mt-3">
+                          <a
+                            href={certification.certificateUrl}
+                            className="bg-stroke py-2 px-4 rounded-lg text-highlight"
+                          >
+                            View Certificate
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
-              {userDetails.contacts.facebook && (
-                <a href={userDetails.contacts.facebook}>Facebook</a>
-              )}
-              {userDetails.contacts.instagram && (
-                <a href={userDetails.contacts.instagram}>Instagram</a>
-              )}
+            </div>
+            <div>
               {userDetails.testimonials && (
                 <div className="mb-4">
-                  <h5 className="font-semibold text-gray-700 mb-2">
-                    Testimonials:
-                  </h5>
-                  <p className="list-disc pl-3 text-gray-700">
+                  <h5 className={headingStyle}>Testimonials:</h5>
+                  <p className="pl-3">
                     {userDetails.testimonials.map((testimonial) => (
-                      <p key={testimonial.author}>
-                        {testimonial.review} by {testimonial.author}
+                      <p
+                        key={testimonial.id}
+                        className="bg-background p-3 mb-2 rounded-lg"
+                      >
+                        "{testimonial.review}" by {testimonial.author}
                       </p>
                     ))}
                   </p>

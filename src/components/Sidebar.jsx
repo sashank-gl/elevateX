@@ -50,47 +50,53 @@ const Sidebar = () => {
               />
             </div>
           )}
-          <Link
-            className="text-xl  font-bold hover:underline"
-            to={`/${user.uid}`}
-          >
-            View My Portfolio
-          </Link>
         </div>
       </div>
 
       <div className="flex flex-col gap-3  font-semibold">
         <Link
           to="/"
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
         >
           Home
         </Link>
         <Link
           to="/profile"
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
         >
           My Profile
         </Link>
         <Link
           to="/edit-profile"
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
         >
           Edit Profile
         </Link>
-       
+        <Link
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
+          to={`/${user.uid}`}
+        >
+          My Portfolio
+        </Link>
+
         <Link
           to="/templates"
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
         >
           Templates
         </Link>
-        <Link className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white">
-          Settings
+        <Link
+          to="/review"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
+        >
+          Leave a Review
+        </Link>
+        <Link to='/donate' className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight">
+          Buy Me a Coffee
         </Link>
         <button
           onClick={handleSignOutWithGoogle}
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-white"
+          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
         >
           Sign Out
         </button>

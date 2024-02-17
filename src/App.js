@@ -11,6 +11,8 @@ import UserDetails from "./pages/UserDetails";
 import ProtectedLayout from "./utils/ProtectedLayout";
 import UserInfo from "./pages/UserInfo";
 import AllTemplates from "./pages/AllTemplates";
+import Review from "./pages/Review";
+import Donate from "./pages/Donate";
 
 const App = () => {
   return (
@@ -47,6 +49,8 @@ const App = () => {
           <Route path="/profile" element={<UserDetails />} />
           <Route path="/edit-profile" element={<UserInfo />} />
           <Route path="/templates" element={<AllTemplates />} />
+          <Route path="/review" element={<Review />} />
+          <Route path="/donate" element={<Donate />} />
         </Route>
 
         {/* {user && <Route path={`/${user.uid}`} element={<Portfolio />} />} */}

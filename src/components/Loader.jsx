@@ -16,7 +16,7 @@ const Loader = () => {
         repeat: Infinity,
         repeatDelay: 0.75,
       }}
-      className="h-10 w-10"
+      className="h-8 w-8"
     />
   );
 };

@@ -15,6 +15,7 @@ import Certifications from "./userinfo/Certifications";
 import Testimonials from "./userinfo/Testimonials";
 import Hobbies from "./userinfo/Hobbies";
 import UserDetails from "./UserDetails";
+import Loader from "../components/Loader";
 
 const UserInfo = () => {
   const { user } = UserAuth();
@@ -38,6 +39,7 @@ const UserInfo = () => {
 
     // Professional Details
     professionalTitle: "",
+    brandName: "",
     tagline: "",
     callToActionText: "",
     portfolioGoal: "",
@@ -50,7 +52,7 @@ const UserInfo = () => {
         companyName: "",
         position: "",
         location: "",
-        responsibilities: "",
+        responsibilities: [""],
         skills: "",
         startDate: "",
         endDate: "",
@@ -61,7 +63,6 @@ const UserInfo = () => {
         name: "",
         proficiency: "",
         category: "",
-        // Programming Languages, Frameworks, Tools, Soft Skills, etc.
       },
     ],
     education: [
@@ -110,10 +111,10 @@ const UserInfo = () => {
     templateName: "Monochromatic",
     isPublic: false,
   });
-  const [isPublic, setIsPublic] = useState(formData.isPublic);
   const [photo, setPhoto] = useState(null);
-  const [editMode, setEditMode] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
+  const [isPublic, setIsPublic] = useState(userDetails?.isPublic ?? false);
+  console.log("Visibility: ", isPublic);
 
   useEffect(() => {
     if (user) {
@@ -124,7 +125,12 @@ const UserInfo = () => {
           if (docSnapshot.exists()) {
             setUserDetails(docSnapshot.data());
             setFormData(docSnapshot.data());
+            if (docSnapshot.data().isPublic !== isPublic) {
+              setIsPublic(docSnapshot.data().isPublic);
+            }
             fetchUserPhoto(user.uid);
+          } else {
+            setIsPublic(false);
           }
         })
         .catch((error) => {
@@ -143,9 +149,16 @@ const UserInfo = () => {
     }
   };
 
+  const [isVisibilityChanging, setIsVisibilityChanging] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const makeProfilePublic = async () => {
+    setIsVisibilityChanging(true);
     try {
       await updateDoc(doc(firebaseDB, "users", user.uid), {
+        isPublic: true,
+      });
+      await updateDoc(doc(firebaseDB, "searchableUsers", user.uid), {
         isPublic: true,
       });
 
@@ -153,25 +166,38 @@ const UserInfo = () => {
       setFormData((prevFormData) => ({ ...prevFormData, isPublic: true }));
       setIsPublic(true);
       console.log("Profile successfully made public.");
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+        setIsVisibilityChanging(false); // Close loading state
+      }, 1000);
     } catch (error) {
       console.error("Error making profile public:", error);
-      // Handle errors appropriately (e.g., display an error message to the user)
+      setIsVisibilityChanging(false);
     }
   };
 
   const makeProfilePrivate = async () => {
+    setIsVisibilityChanging(true);
     try {
       await updateDoc(doc(firebaseDB, "users", user.uid), {
         isPublic: false,
       });
-
+      await updateDoc(doc(firebaseDB, "searchableUsers", user.uid), {
+        isPublic: false,
+      });
       // Update local state and UI
       setFormData((prevFormData) => ({ ...prevFormData, isPublic: false }));
       setIsPublic(false);
       console.log("Profile successfully made private.");
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+        setIsVisibilityChanging(false); // Close loading state
+      }, 1000);
     } catch (error) {
       console.error("Error making profile private:", error);
-      // Handle errors appropriately
+      setIsVisibilityChanging(false);
     }
   };
 
@@ -286,13 +312,22 @@ const UserInfo = () => {
     }));
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setIsSubmitting(true);
     const searchableUserData = {
       userId: user.uid,
       email: formData.contacts.email,
       name: `${formData.firstName} ${formData.lastName}`,
+      photo: photo,
+      review: {
+        text: "",
+        feedback: "",
+        stars: 0,
+      },
+      title: formData.professionalTitle,
       uniqueUrl: formData.uniqueUrl,
       isPublic: formData.isPublic,
     };
@@ -307,7 +342,7 @@ const UserInfo = () => {
     }
 
     // Check for changes and only update changed fields
-    const updatedData = { ...formData, isPublic };
+    const updatedData = { ...formData };
     for (const field of Object.keys(formData)) {
       if (formData[field] !== userDetails?.[field]) {
         updatedData[field] = formData[field];
@@ -334,9 +369,14 @@ const UserInfo = () => {
         await updateDoc(docRef, updatedData);
         console.log("Personal Details updated successfully");
       }
-      setEditMode(false);
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+        setIsSubmitting(false);
+      }, 1000);
     } catch (error) {
       console.error("Error updating details:", error);
+      setIsSubmitting(false);
       // Handle error and inform user appropriately
     }
   };
@@ -357,8 +397,8 @@ const UserInfo = () => {
       const photoUrl = await getDownloadURL(storageRef);
       setPhoto(photoUrl);
       setUploadStatus("Uploaded!");
+      setSelectedFile(null);
       setTimeout(() => {
-        setSelectedFile(null);
         setUploadStatus("Upload Photo");
       }, 2000);
     } catch (error) {
@@ -404,7 +444,7 @@ const UserInfo = () => {
           companyName: "",
           position: "",
           location: "",
-          responsibilities: "",
+          responsibilities: [""],
           skills: "",
           startDate: "",
           endDate: "",
@@ -426,6 +466,33 @@ const UserInfo = () => {
   const handleExperienceChange = (index, field, value) => {
     const updatedExperience = [...formData.experience];
     updatedExperience[index][field] = value;
+    setFormData({
+      ...formData,
+      experience: updatedExperience,
+    });
+  };
+
+  const addResponsibility = (expIndex) => {
+    const updatedExperience = [...formData.experience];
+    updatedExperience[expIndex].responsibilities.push(""); // Add an empty responsibility
+    setFormData({
+      ...formData,
+      experience: updatedExperience,
+    });
+  };
+
+  const removeResponsibility = (expIndex, respIndex) => {
+    const updatedExperience = [...formData.experience];
+    updatedExperience[expIndex].responsibilities.splice(respIndex, 1); // Remove responsibility at respIndex
+    setFormData({
+      ...formData,
+      experience: updatedExperience,
+    });
+  };
+
+  const handleResponsibilityChange = (expIndex, respIndex, value) => {
+    const updatedExperience = [...formData.experience];
+    updatedExperience[expIndex].responsibilities[respIndex] = value;
     setFormData({
       ...formData,
       experience: updatedExperience,
@@ -537,12 +604,25 @@ const UserInfo = () => {
   const headingStyle = `text-4xl font-bold text-center py-3 italic rounded-full cursor-pointer hover:bg-stroke hover:text-white`;
   return (
     <div className="h-full overflow-y-auto flex flex-col text-xl">
-      
+      {isSubmitting && (
+        <div className="fixed inset-0 h-screen bg-background/50 z-10 backdrop-blur-md flex flex-col gap-12 justify-center items-center">
+          <Loader />
+          <p className="text-2xl font-semibold animate-pulse">Saving Changes</p>
+        </div>
+      )}
+
+      {showSuccess && (
+        <div className="fixed inset-0 h-screen bg-background/50 z-10 backdrop-blur-md flex flex-col gap-12 justify-center items-center">
+          {/* <Loader /> */}
+          <p className="text-2xl font-semibold animate-pulse">Success!</p>
+        </div>
+      )}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col gap-4  shadow-md rounded-lg m-12 p-8"
+        className="flex flex-col gap-4 rounded-lg m-12 p-8"
       >
         <div className="flex items-center justify-start gap-8">
           {photo && (
@@ -550,7 +630,7 @@ const UserInfo = () => {
               <img
                 src={photo}
                 alt="Profile"
-                className="rounded-lg object-cover max-h-48 w-36 mx-auto"
+                className="rounded-lg object-cover h-56 w-56 mx-auto"
               />
             </div>
           )}
@@ -577,17 +657,27 @@ const UserInfo = () => {
           </label>
           {formData.isPublic ? (
             <button
-              className="bg-stroke p-2 px-4 text-highlight font-semibold rounded-lg"
+              className="bg-button hover:bg-stroke p-2 px-4 text-highlight font-semibold rounded-lg"
               onClick={makeProfilePrivate}
+              disabled={isVisibilityChanging}
             >
-              Make Profile Private
+              {showSuccess
+                ? "Success"
+                : isVisibilityChanging
+                ? "Processing..."
+                : "Make Profile Private"}
             </button>
           ) : (
             <button
-              className="bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
+              className="bg-button hover:bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
               onClick={makeProfilePublic}
+              disabled={isVisibilityChanging}
             >
-              Make Profile Public
+              {showSuccess
+                ? "Success"
+                : isVisibilityChanging
+                ? "Processing..."
+                : "Make Profile Public"}
             </button>
           )}
         </div>
@@ -615,6 +705,9 @@ const UserInfo = () => {
               addExperience={addExperience}
               removeExperience={removeExperience}
               handleChange={handleExperienceChange}
+              addResponsibility={addResponsibility}
+              removeResponsibility={removeResponsibility}
+              handleResponsibilityChange={handleResponsibilityChange}
             />
           )}
 
@@ -706,16 +799,9 @@ const UserInfo = () => {
           <div className="flex gap-4 justify-center">
             <button
               type="submit"
-              className="bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
+              className="bg-button hover:bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
             >
               Save Changes
-            </button>
-            <button
-              type="button"
-              className="bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
-              onClick={() => setEditMode(false)}
-            >
-              Cancel
             </button>
           </div>
         </form>

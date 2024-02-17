@@ -16,7 +16,7 @@ const Portfolio = () => {
   const [templateId, setTemplateId] = useState(null);
   const [templateName, setTemplateName] = useState(null);
 
-  console.log('Template ID: ',templateId);
+  console.log("Template ID: ", templateId);
 
   useEffect(() => {
     if (userId) {
@@ -55,9 +55,9 @@ const Portfolio = () => {
     if (!templateId) {
       return null;
     }
-
+    const formattedTemplateName = templateName.replace(/\s/g, "");
     const TemplateComponent = React.lazy(() =>
-      import(`../templates/free/${templateName}`)
+      import(`../templates/${formattedTemplateName}`)
     );
 
     return (
@@ -71,9 +71,7 @@ const Portfolio = () => {
     <div>
       <motion.div className="gap-6">
         {user && client && (user.uid === userId || client.isPublic) ? (
-          <>
-            {renderTemplate()}
-          </>
+          <>{renderTemplate()}</>
         ) : (
           <PrivateUser />
         )}

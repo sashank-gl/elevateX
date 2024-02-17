@@ -29,6 +29,7 @@ const Skills = ({ skills, handleChange, addSkill, removeSkill }) => {
                 handleChange(index, "proficiency", e.target.value)
               }
             >
+              <option value="">Select Proficiency</option>
               <option value="beginner">Beginner</option>
               <option value="intermediate">Intermediate</option>
               <option value="advanced">Advanced</option>

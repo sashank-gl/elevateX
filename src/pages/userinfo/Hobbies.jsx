@@ -7,7 +7,7 @@ const Hobbies = ({ hobbies, addHobby, removeHobby, updateHobby }) => {
   return (
     <div>
       {hobbies?.map((hobby, index) => (
-        <div key={index}>
+        <div key={index} className="flex mb-4 gap-4">
           <input
             className={inputStyle}
             type="text"

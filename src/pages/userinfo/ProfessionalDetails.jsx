@@ -25,6 +25,16 @@ const ProfessionalDetails = ({
           onChange={handleChange}
         />
       </label>
+      <label className={labelStyle}>
+        <span className={labelTextStyle}>Brand Name:</span>
+        <input
+          className={inputStyle}
+          type="text"
+          name="brandName"
+          value={formData?.brandName}
+          onChange={handleChange}
+        />
+      </label>
 
       <label className={labelStyle}>
         <span className={labelTextStyle}>Tagline:</span>
