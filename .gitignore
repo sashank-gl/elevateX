@@ -83,7 +83,7 @@ web_modules/
 firebaseConfig.js
 firebaseServiceKey.json
 
-
+build
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -134,3 +134,16 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+.firebase
+.github
+functions
+.firebaserc
+database.rules.json
+firebase.json
+firestore.indexes.json
+firestore.rules
+remoteconfig.template.json
+storage.rules
+extensions

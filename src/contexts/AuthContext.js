@@ -9,7 +9,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { firebaseApp, firebaseDB } from "../firebaseConfig";
 
 const auth = getAuth(firebaseApp);
@@ -17,11 +17,28 @@ const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [firebaseUser, setFirebaseUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+
+      if (currentUser) {
+        const docRef = doc(firebaseDB, "users", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setFirebaseUser(docSnap.data());
+          // Alternatively, store specific fields if needed.
+        } else {
+          console.log("No user data found in Firestore");
+          // Optionally create a new user document here.
+        }
+      } else {
+        setFirebaseUser(null);
+      }
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -52,7 +69,9 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, signOutWithGoogle }}>
+    <AuthContext.Provider
+      value={{ user, firebaseUser, signInWithGoogle, signOutWithGoogle }}
+    >
       {children}
     </AuthContext.Provider>
   );
