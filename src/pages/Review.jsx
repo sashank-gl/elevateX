@@ -39,7 +39,7 @@ const Review = () => {
       },
     };
 
-    const searchableUserRef = doc(firebaseDB, "searchableUsers", user.uid);
+    const searchableUserRef = doc(firebaseDB, "publicUsers", user.uid);
     try {
       await updateDoc(searchableUserRef, searchableUserData);
       console.log("Review updated successfully");

@@ -28,13 +28,13 @@ const Search = () => {
     if (searchTerm.includes("@")) {
       // Email search: Exact match, case-insensitive
       searchQuery = query(
-        collection(firebaseDB, "searchableUsers"),
+        collection(firebaseDB, "publicUsers"),
         where("email", "==", searchTerm.toLowerCase())
       );
     } else {
       // Name search: Partial match, full-text search
       searchQuery = query(
-        collection(firebaseDB, "searchableUsers"),
+        collection(firebaseDB, "publicUsers"),
         where("name", "==", searchTerm.toLowerCase())
       );
     }

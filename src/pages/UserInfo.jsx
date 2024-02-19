@@ -158,7 +158,7 @@ const UserInfo = () => {
       await updateDoc(doc(firebaseDB, "users", user.uid), {
         isPublic: true,
       });
-      await updateDoc(doc(firebaseDB, "searchableUsers", user.uid), {
+      await updateDoc(doc(firebaseDB, "publicUsers", user.uid), {
         isPublic: true,
       });
 
@@ -183,7 +183,7 @@ const UserInfo = () => {
       await updateDoc(doc(firebaseDB, "users", user.uid), {
         isPublic: false,
       });
-      await updateDoc(doc(firebaseDB, "searchableUsers", user.uid), {
+      await updateDoc(doc(firebaseDB, "publicUsers", user.uid), {
         isPublic: false,
       });
       // Update local state and UI
@@ -332,12 +332,12 @@ const UserInfo = () => {
       isPublic: formData.isPublic,
     };
 
-    const searchableUserRef = doc(firebaseDB, "searchableUsers", user.uid);
+    const searchableUserRef = doc(firebaseDB, "publicUsers", user.uid);
     try {
       await setDoc(searchableUserRef, searchableUserData);
-      console.log("User added to searchableUsers collection successfully");
+      console.log("User added to publicUsers collection successfully");
     } catch (error) {
-      console.error("Error adding user to searchableUsers:", error);
+      console.error("Error adding user to publicUsers:", error);
       // Handle errors appropriately
     }
 

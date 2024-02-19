@@ -26,7 +26,7 @@ const Home = () => {
 
   useEffect(() => {
     const publicUsersRef = query(
-      collection(firebaseDB, "searchableUsers"),
+      collection(firebaseDB, "publicUsers"),
       where("isPublic", "==", true)
     );
 
