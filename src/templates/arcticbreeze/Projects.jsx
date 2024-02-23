@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 const Projects = ({ client }) => {
   const [selectedProject, setSelectedProject] = useState(
-    client.projects && client.projects.length > 0 ? client.projects[0] : null
+    client.projects && client.projects.length > 0 ? client.projects[0] : null,
   );
 
   function formatDate(inputDate) {
@@ -18,22 +18,22 @@ const Projects = ({ client }) => {
   }
 
   return (
-    <div className="h-screen flex flex-col pt-16">
+    <div className="flex h-screen flex-col pt-16">
       <div className="h-1/2">
-        <p className="text-4xl font-bold ml-20 text-abreeze-stroke">Projects</p>
-        <div className="flex justify-center items-center p-12 px-24 gap-12">
+        <p className="ml-20 text-4xl font-bold text-abreeze-stroke">Projects</p>
+        <div className="flex items-center justify-center gap-12 p-12 px-24">
           <div className="flex flex-col">
             {client.projects &&
               client.projects.map((project, index) => (
                 <div
                   key={index}
-                  className={`cursor-pointer flex justify-center border-stroke ${
+                  className={`flex cursor-pointer justify-center border-stroke ${
                     selectedProject === project ? "border-l-4" : "border-l-2"
                   }`}
                   onClick={() => setSelectedProject(project)}
                 >
-                  <div className="flex flex-col justify-center min-w-40 py-2 px-4 hover:bg-abreeze-secondary overflow-hidden">
-                    <motion.p className={`font-bold text-center`}>
+                  <div className="flex min-w-40 flex-col justify-center overflow-hidden px-4 py-2 hover:bg-abreeze-secondary">
+                    <motion.p className={`text-center font-bold`}>
                       {project.name}
                     </motion.p>
                   </div>
@@ -45,7 +45,7 @@ const Projects = ({ client }) => {
               <div className="flex flex-col gap-4">
                 <p className="italic">{selectedProject.description}</p>
                 {selectedProject.startDate && selectedProject.endDate && (
-                  <p className="text-sm text-white/75 italic">
+                  <p className="text-sm italic text-white/75">
                     {formatDate(selectedProject.startDate)} -{" "}
                     {formatDate(selectedProject.endDate)}
                   </p>
@@ -58,13 +58,13 @@ const Projects = ({ client }) => {
                 <div className="flex gap-20">
                   <a
                     href={selectedProject.projectUrl}
-                    className="bg-abreeze-button text-abreeze-buttonText py-2 px-4 rounded-lg"
+                    className="rounded-lg bg-abreeze-button px-4 py-2 text-abreeze-buttonText"
                   >
                     View Project
                   </a>
                   <a
                     href={selectedProject.repositoryUrl}
-                    className="bg-abreeze-button text-abreeze-buttonText py-2 px-4 rounded-lg"
+                    className="rounded-lg bg-abreeze-button px-4 py-2 text-abreeze-buttonText"
                   >
                     View Code
                   </a>
@@ -76,15 +76,15 @@ const Projects = ({ client }) => {
       </div>
 
       <div className="h-1/2">
-        <p className="text-4xl font-bold ml-20 text-abreeze-stroke">Skills</p>
-        <div className="flex justify-center items-center p-12 px-24 gap-12">
+        <p className="ml-20 text-4xl font-bold text-abreeze-stroke">Skills</p>
+        <div className="flex items-center justify-center gap-12 p-12 px-24">
           {client.skills && (
             <div className="grid grid-cols-4 gap-4">
               {client.skills.map((skill) => (
                 <div key={skill} className="mb-2">
                   <p>{skill.name}</p>
 
-                  <div className="mt-2 h-2 w-48 bg-gray-200 rounded">
+                  <div className="mt-2 h-2 w-48 rounded bg-gray-200">
                     <div
                       className={`h-full rounded bg-abreeze-stroke`}
                       style={{
@@ -92,10 +92,10 @@ const Projects = ({ client }) => {
                           skill.proficiency === "beginner"
                             ? "25%"
                             : skill.proficiency === "intermediate"
-                            ? "50%"
-                            : skill.proficiency === "advanced"
-                            ? "75%"
-                            : "100%",
+                              ? "50%"
+                              : skill.proficiency === "advanced"
+                                ? "75%"
+                                : "100%",
                       }}
                     />
                   </div>

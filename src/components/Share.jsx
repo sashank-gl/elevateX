@@ -1,15 +1,13 @@
 import { IoMdCloseCircle } from "react-icons/io";
-import { useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaFacebookF } from "react-icons/fa";
 import { MdContentCopy } from "react-icons/md";
-import {motion} from 'framer-motion'
+import { motion } from "framer-motion";
 const Share = ({ handleShareDialog }) => {
   const shareUrl = `Land your dream job with a portfolio that shines! ✨ ElevateX helps you create one in minutes. Everyone deserves a standout portfolio! Click here to get started: https://www.yourwebsite.com`;
 
   const handleShareClick = (platform) => {
-    // Handle sharing for each platform
     switch (platform) {
       case "whatsapp":
         window.open(`https://wa.me/?text=${shareUrl}`);
@@ -34,16 +32,16 @@ const Share = ({ handleShareDialog }) => {
   };
 
   return (
-    <div className="fixed inset-0 h-screen bg-background/50 z-10 backdrop-blur-md flex flex-col justify-center items-center">
+    <div className="fixed inset-0 z-10 flex h-screen flex-col items-center justify-center bg-background/50 backdrop-blur-md">
       <motion.div
-      whileHover={{scale:1.2}}
-        className="fixed top-10 right-10 cursor-pointer"
+        whileHover={{ scale: 1.2 }}
+        className="fixed right-10 top-10 cursor-pointer"
         onClick={handleShareDialog}
       >
         <IoMdCloseCircle fontSize={36} />
       </motion.div>
 
-      <div className="text-center flex flex-col gap-6 mb-12">
+      <div className="mb-12 flex flex-col gap-6 text-center">
         <p className="text-5xl font-bold">
           Do you know someone struggling to build a portfolio?
         </p>
@@ -53,29 +51,29 @@ const Share = ({ handleShareDialog }) => {
         </p>
       </div>
 
-      <div className="flex flex-col items-center my-6 gap-4">
+      <div className="my-6 flex flex-col items-center gap-4">
         <button
-          className="px-4 py-2 bg-stroke text-highlight flex items-center gap-3 w-64 text-xl"
+          className="flex w-64 items-center gap-3 bg-stroke px-4 py-2 text-xl text-highlight"
           onClick={() => handleShareClick("whatsapp")}
         >
           <FaWhatsapp />
           <p>Share on WhatsApp</p>
         </button>
         <button
-          className="px-4 py-2 bg-stroke text-highlight flex items-center gap-3 w-64 text-xl"
+          className="flex w-64 items-center gap-3 bg-stroke px-4 py-2 text-xl text-highlight"
           onClick={() => handleShareClick("twitter")}
         >
           <FaXTwitter />
           <p>Share on Twitter</p>
         </button>
         <button
-          className="px-4 py-2 bg-stroke text-highlight flex items-center gap-3 w-64 text-xl"
+          className="flex w-64 items-center gap-3 bg-stroke px-4 py-2 text-xl text-highlight"
           onClick={() => handleShareClick("facebook")}
         >
           <FaFacebookF /> <p>Share on Facebook</p>
         </button>
         <button
-          className="px-4 py-2 bg-stroke text-highlight flex items-center gap-3 w-64 text-xl"
+          className="flex w-64 items-center gap-3 bg-stroke px-4 py-2 text-xl text-highlight"
           onClick={handleCopyClick}
         >
           <MdContentCopy />

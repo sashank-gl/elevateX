@@ -24,7 +24,7 @@ const ExperienceDetails = ({
   return (
     <div>
       {experience.map((exp, index) => (
-        <div key={index} className="grid grid-cols-2 mb-4 gap-4">
+        <div key={index} className="mb-4 grid grid-cols-2 gap-4">
           <label className={labelStyle}>
             <span className={labelTextStyle}>Company Name:</span>
             <input
@@ -57,12 +57,12 @@ const ExperienceDetails = ({
               onChange={(e) => handleChange(index, "startDate", e.target.value)}
             />
           </label>
-          <div className="flex items-center my-4">
+          <div className="my-4 flex items-center">
             <input
               type="checkbox"
               checked={exp.isPresentCompany}
               onChange={() => togglePresentCompany(index)}
-              className="mr-2 w-6 h-6 cursor-pointer"
+              className="mr-2 h-6 w-6 cursor-pointer"
             />
             <span>Present Company</span>
           </div>
@@ -78,7 +78,7 @@ const ExperienceDetails = ({
               />
             </label>
           )}
-          <div className={`${labelStyle} flex-col col-span-2`}>
+          <div className={`${labelStyle} col-span-2 flex-col`}>
             <span className={`my-1`}>Responsibilities:</span>
             {exp.responsibilities.map((responsibility, respIndex) => (
               <div key={respIndex} className="flex">
@@ -91,7 +91,7 @@ const ExperienceDetails = ({
                   className="rounded-lg"
                 />
                 <button
-                  className="bg-red-500 text-white font-semibold p-2 rounded-lg ml-2"
+                  className="ml-2 rounded-lg bg-red-500 p-2 font-semibold text-white"
                   type="button"
                   onClick={() => removeResponsibility(index, respIndex)}
                 >
@@ -100,7 +100,7 @@ const ExperienceDetails = ({
               </div>
             ))}
             <button
-              className="bg-green-500 text-white font-semibold p-2 rounded-lg mt-2"
+              className="mt-2 rounded-lg bg-green-500 p-2 font-semibold text-white"
               type="button"
               onClick={() => addResponsibility(index)}
             >
@@ -108,7 +108,7 @@ const ExperienceDetails = ({
             </button>
           </div>
 
-          <label className={`${labelStyle} flex-col col-span-2`}>
+          <label className={`${labelStyle} col-span-2 flex-col`}>
             <span className={`my-1`}>Skills:</span>
             <input
               name={`experience[${index}].skills`}
@@ -117,9 +117,9 @@ const ExperienceDetails = ({
               className="rounded-lg"
             />
           </label>
-          <div className="col-span-2 flex justify-center items-center">
+          <div className="col-span-2 flex items-center justify-center">
             <button
-              className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+              className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
               type="button"
               onClick={() => removeExperience(index)}
             >
@@ -129,7 +129,7 @@ const ExperienceDetails = ({
         </div>
       ))}
       <button
-        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+        className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
         type="button"
         onClick={addExperience}
       >

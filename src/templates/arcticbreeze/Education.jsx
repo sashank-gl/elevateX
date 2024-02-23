@@ -3,7 +3,9 @@ import React, { useState } from "react";
 
 const Education = ({ client }) => {
   const [selectedEducation, setSelectedEducation] = useState(
-    client.education && client.education.length > 0 ? client.education[0] : null
+    client.education && client.education.length > 0
+      ? client.education[0]
+      : null,
   );
 
   function formatDate(inputDate) {
@@ -18,21 +20,21 @@ const Education = ({ client }) => {
   }
 
   return (
-    <div className="h-screen flex flex-col justify-center pt-16">
-      <p className="text-4xl font-bold ml-20 text-abreeze-stroke">Education</p>
-      <div className="min-h-2/3 flex justify-center items-center p-12 px-24 gap-12">
+    <div className="flex h-screen flex-col justify-center pt-16">
+      <p className="ml-20 text-4xl font-bold text-abreeze-stroke">Education</p>
+      <div className="min-h-2/3 flex items-center justify-center gap-12 p-12 px-24">
         <div className="flex flex-col">
           {client.education &&
             client.education.map((edu, index) => (
               <div
                 key={index}
-                className={`cursor-pointer flex justify-center border-stroke ${
+                className={`flex cursor-pointer justify-center border-stroke ${
                   selectedEducation === edu ? "border-l-4" : "border-l-2"
                 }`}
                 onClick={() => setSelectedEducation(edu)}
               >
-                <div className="flex flex-col justify-center min-w-40 py-2 px-4 hover:bg-abreeze-secondary overflow-hidden">
-                  <motion.p className={`font-bold text-center`}>
+                <div className="flex min-w-40 flex-col justify-center overflow-hidden px-4 py-2 hover:bg-abreeze-secondary">
+                  <motion.p className={`text-center font-bold`}>
                     {edu.degree}
                   </motion.p>
                 </div>

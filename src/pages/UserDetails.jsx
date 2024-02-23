@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import Loader from "../components/Loader";
 import { UserAuth } from "../contexts/AuthContext";
 import { motion } from "framer-motion";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { firebaseDB, storage } from "../firebaseConfig";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { doc, getDoc } from "firebase/firestore";
+import { firebaseDB } from "../firebaseConfig";
 import { TiTick } from "react-icons/ti";
 import {
   FaFacebookF,
@@ -32,7 +31,7 @@ const UserDetails = () => {
 
   useEffect(() => {
     if (user) {
-      const docRef = doc(firebaseDB, "users", user.uid);
+      const docRef = doc(firebaseDB, "userInfo", user.uid);
 
       getDoc(docRef)
         .then((docSnapshot) => {
@@ -54,7 +53,7 @@ const UserDetails = () => {
       {userDetails ? (
         <motion.div className="flex flex-col gap-4">
           {/* Personal Details */}
-          <div className="bg-main p-4 rounded-lg flex flex-col justify-center gap-4">
+          <div className="flex flex-col justify-center gap-4 rounded-lg bg-main p-4">
             <p className="text-5xl">
               {userDetails.firstName} {userDetails.lastName}
             </p>
@@ -64,7 +63,7 @@ const UserDetails = () => {
           </div>
 
           <div className="flex gap-4">
-            <div className="w-1/3 bg-main p-4 rounded-lg flex flex-col gap-8">
+            <div className="flex w-1/3 flex-col gap-8 rounded-lg bg-main p-4">
               <div>
                 {userDetails.contacts.email && (
                   <p>{userDetails.contacts.email}</p>
@@ -118,13 +117,13 @@ const UserDetails = () => {
               <div>
                 {userDetails.skills && (
                   <div className="mb-4">
-                    <h5 className="font-semibold mb-2">Skills:</h5>
+                    <h5 className="mb-2 font-semibold">Skills:</h5>
                     <div className="">
                       {userDetails.skills.map((skill) => (
                         <div key={skill} className="mb-2">
                           <p>{skill.name}</p>
 
-                          <div className="h-2 w-48 bg-background rounded">
+                          <div className="h-2 w-48 rounded bg-background">
                             <div
                               className={`h-full rounded bg-stroke`}
                               style={{
@@ -132,10 +131,10 @@ const UserDetails = () => {
                                   skill.proficiency === "beginner"
                                     ? "25%"
                                     : skill.proficiency === "intermediate"
-                                    ? "50%"
-                                    : skill.proficiency === "advanced"
-                                    ? "75%"
-                                    : "100%",
+                                      ? "50%"
+                                      : skill.proficiency === "advanced"
+                                        ? "75%"
+                                        : "100%",
                               }}
                             />
                           </div>
@@ -150,7 +149,7 @@ const UserDetails = () => {
               <div>
                 {userDetails.hobbies && (
                   <div className="mb-4">
-                    <h5 className="font-semibold  mb-2">Hobbies:</h5>
+                    <h5 className="mb-2  font-semibold">Hobbies:</h5>
                     <p className="list-disc pl-3 ">
                       {userDetails.hobbies.map((hobby) => (
                         <p key={hobby}>{hobby}</p>
@@ -162,7 +161,7 @@ const UserDetails = () => {
             </div>
 
             {/* Experience */}
-            <div className="w-2/3 bg-main p-4 rounded-lg flex flex-col gap-4">
+            <div className="flex w-2/3 flex-col gap-4 rounded-lg bg-main p-4">
               <div>
                 {userDetails.experience && (
                   <div className="">
@@ -171,14 +170,14 @@ const UserDetails = () => {
                       {userDetails.experience
                         .sort(
                           (a, b) =>
-                            new Date(b.startDate) - new Date(a.startDate)
+                            new Date(b.startDate) - new Date(a.startDate),
                         )
                         .map((exp, index, array) => (
                           <div
                             key={exp.id || exp.companyName}
                             className={`mb-3 ${
                               index !== array.length - 1
-                                ? "pb-3 border-b border-stroke/50"
+                                ? "border-b border-stroke/50 pb-3"
                                 : ""
                             }`}
                           >
@@ -206,10 +205,17 @@ const UserDetails = () => {
                                     </p>
                                     <p>{responsibility}</p>
                                   </div>
-                                )
+                                ),
                               )}
 
-                            {exp.skills && <p>{exp.skills}</p>}
+                            {exp.skills && (
+                              <p className="mt-1">
+                                <span className="font-semibold">
+                                  Skills in action:{" "}
+                                </span>
+                                {exp.skills}
+                              </p>
+                            )}
                           </div>
                         ))}
                     </div>
@@ -225,14 +231,14 @@ const UserDetails = () => {
                       {userDetails.education
                         .sort(
                           (a, b) =>
-                            new Date(b.startDate) - new Date(a.startDate)
+                            new Date(b.startDate) - new Date(a.startDate),
                         )
                         .map((edu, index, array) => (
                           <div
                             key={edu.id || edu.institution}
                             className={`mb-3 ${
                               index !== array.length - 1
-                                ? "pb-3 border-b border-stroke/50"
+                                ? "border-b border-stroke/50 pb-3"
                                 : ""
                             }`}
                           >
@@ -256,7 +262,7 @@ const UserDetails = () => {
             </div>
           </div>
 
-          <div className="bg-main p-4 rounded-lg flex flex-col gap-4">
+          <div className="flex flex-col gap-4 rounded-lg bg-main p-4">
             <div>
               {userDetails.projects && (
                 <div className="mb-4">
@@ -265,7 +271,7 @@ const UserDetails = () => {
                     {userDetails.projects.map((project) => (
                       <div
                         key={project.id}
-                        className="border-4 border-highlight rounded-lg p-3"
+                        className="rounded-lg border-4 border-highlight p-3"
                       >
                         <div className="flex justify-between">
                           <p className={titleStyle}>{project.name}</p>
@@ -281,16 +287,16 @@ const UserDetails = () => {
                         <p className="my-2">{project.description}</p>
                         <p>{project.stack}</p>
 
-                        <div className="flex justify-around">
+                        <div className="mt-2 flex justify-around">
                           <a
                             href={project.projectUrl}
-                            className="bg-stroke py-2 px-4 rounded-lg text-highlight"
+                            className="rounded-lg bg-stroke px-4 py-2 text-highlight"
                           >
                             View Project
                           </a>
                           <a
                             href={project.repositoryUrl}
-                            className="bg-stroke py-2 px-4 rounded-lg text-highlight"
+                            className="rounded-lg bg-stroke px-4 py-2 text-highlight"
                           >
                             View Code
                           </a>
@@ -308,7 +314,10 @@ const UserDetails = () => {
                   <h5 className={headingStyle}>Certifications:</h5>
                   <div>
                     {userDetails.certifications.map((certification) => (
-                      <div key={certification.name} className="flex flex-col gap-1">
+                      <div
+                        key={certification.name}
+                        className="flex flex-col gap-1"
+                      >
                         <p className={titleStyle}>{certification.name}</p>
                         <p className="italic">
                           issued by {certification.issuedBy} on{" "}
@@ -323,7 +332,7 @@ const UserDetails = () => {
                         <div className="mt-3">
                           <a
                             href={certification.certificateUrl}
-                            className="bg-stroke py-2 px-4 rounded-lg text-highlight"
+                            className="rounded-lg bg-stroke px-4 py-2 text-highlight"
                           >
                             View Certificate
                           </a>
@@ -342,7 +351,7 @@ const UserDetails = () => {
                     {userDetails.testimonials.map((testimonial) => (
                       <p
                         key={testimonial.id}
-                        className="bg-background p-3 mb-2 rounded-lg"
+                        className="mb-2 rounded-lg bg-background p-3"
                       >
                         "{testimonial.review}" by {testimonial.author}
                       </p>
@@ -354,7 +363,7 @@ const UserDetails = () => {
           </div>
         </motion.div>
       ) : (
-        <div className="h-screen flex justify-center items-center">
+        <div className="flex h-screen items-center justify-center">
           <Loader />
         </div>
       )}

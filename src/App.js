@@ -19,23 +19,6 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/signin" element={<GoogleSignIn />} />
-        {/* <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <UserDetails />
-            </ProtectedRoute>
-          }
-        />
-        */}
 
         <Route
           path="/"
@@ -53,7 +36,6 @@ const App = () => {
           <Route path="/donate" element={<Donate />} />
         </Route>
 
-        {/* {user && <Route path={`/${user.uid}`} element={<Portfolio />} />} */}
         <Route path="/:userId" element={<Portfolio />} />
       </Routes>
     </BrowserRouter>

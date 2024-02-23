@@ -5,9 +5,6 @@ const Projects = ({
   handleProjectChange,
   addProject,
   removeProject,
-  addFeature,
-  removeFeature,
-  updateFeature,
 }) => {
   const labelStyle = "flex flex-col gap-4";
   const inputStyle = "h-10 rounded-lg p-1";
@@ -15,7 +12,7 @@ const Projects = ({
   return (
     <div>
       {projects.map((project, index) => (
-        <div key={index} className="grid grid-cols-2 mb-4 gap-4">
+        <div key={index} className="mb-4 grid grid-cols-2 gap-4">
           <label className={labelStyle}>
             <span className="my-1">Project Name:</span>
             <input
@@ -34,7 +31,7 @@ const Projects = ({
               onChange={(e) =>
                 handleProjectChange(index, "description", e.target.value)
               }
-              className="rounded-lg min-h-36"
+              className="min-h-36 rounded-lg"
             />
           </label>
 
@@ -93,9 +90,9 @@ const Projects = ({
               }
             />
           </label>
-          <div className="col-span-2 flex justify-center items-center">
+          <div className="col-span-2 flex items-center justify-center">
             <button
-              className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+              className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
               type="button"
               onClick={() => removeProject(index)}
             >
@@ -105,7 +102,7 @@ const Projects = ({
         </div>
       ))}
       <button
-        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+        className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
         type="button"
         onClick={() => addProject()}
       >

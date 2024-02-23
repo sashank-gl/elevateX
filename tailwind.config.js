@@ -29,6 +29,19 @@ module.exports = {
         tertiary: "#ef4565",
       },
 
+      // Spring Meadow
+
+      springm: {
+        background: "#fffffe",
+        paragraph: "#1b2d45",
+        highlight: "#00ebc7",
+        button: "#00ebc7",
+        buttonText: "#00214d",
+        stroke: "#00214d",
+        secondary: "#ff5470",
+        tertiary: "#fde24f",
+      },
+
       // Default
       black: colors.black,
       white: colors.white,

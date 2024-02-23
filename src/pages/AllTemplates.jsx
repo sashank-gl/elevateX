@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { UserAuth } from "../contexts/AuthContext";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { firebaseDB } from "../firebaseConfig";
@@ -12,11 +11,10 @@ const AllTemplates = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
-    // Fetch templates from Firebase or a local data source
-    // Assuming a local array of templates for now
     const fetchedTemplates = [
       { id: "monochromatic", name: "Monochromatic", category: "monochrome" },
       { id: "arctic-breeze", name: "Arctic Breeze", category: "fresher" },
+      { id: "spring-meadow", name: "Spring Meadow", category: "fresher" },
     ];
     setTemplates(fetchedTemplates);
     setFilteredTemplates(fetchedTemplates);
@@ -24,6 +22,7 @@ const AllTemplates = () => {
 
   const handleTemplateClick = (template) => {
     setTemplateId(template.id);
+    console.log(template.id);
 
     const userDocRef = doc(firebaseDB, "users", user?.uid);
     updateDoc(userDocRef, {
@@ -37,7 +36,7 @@ const AllTemplates = () => {
       setFilteredTemplates(templates);
     } else {
       const filtered = templates.filter(
-        (template) => template.category === selectedCategory
+        (template) => template.category === selectedCategory,
       );
       setFilteredTemplates(filtered);
     }
@@ -50,35 +49,35 @@ const AllTemplates = () => {
   return (
     <div className="p-12">
       <div>
-        <div className="flex items-center gap-4 mb-4">
+        <div className="mb-4 flex items-center gap-4">
           <button
             onClick={() => handleCategoryChange("frontend")}
-            className="px-4 py-2 bg-main text-heading font-semibold rounded-lg"
+            className="rounded-lg bg-main px-4 py-2 font-semibold text-heading"
           >
             Frontend
           </button>
           <button
             onClick={() => handleCategoryChange("backend")}
-            className="px-4 py-2 bg-main text-heading font-semibold rounded-lg"
+            className="rounded-lg bg-main px-4 py-2 font-semibold text-heading"
           >
             Backend
           </button>
           <button
             onClick={() => handleCategoryChange("fresher")}
-            className="px-4 py-2 bg-main text-heading font-semibold rounded-lg"
+            className="rounded-lg bg-main px-4 py-2 font-semibold text-heading"
           >
             Fresher
           </button>
           <button
             onClick={() => handleCategoryChange("monochrome")}
-            className="px-4 py-2 bg-main text-heading font-semibold rounded-lg"
+            className="rounded-lg bg-main px-4 py-2 font-semibold text-heading"
           >
             Monochrome
           </button>
           <select
             value={selectedCategory}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="px-4 py-2 rounded-lg border bg-main text-heading font-semibold border-main focus:outline-none focus:ring-2 focus:ring-stroke"
+            className="rounded-lg border border-main bg-main px-4 py-2 font-semibold text-heading focus:outline-none focus:ring-2 focus:ring-stroke"
           >
             <option value="all">All Categories</option>
             <option value="frontend">Frontend</option>
@@ -89,18 +88,20 @@ const AllTemplates = () => {
         </div>
 
         {filteredTemplates.length === 0 ? (
-          <div className="text-center h-96 text-2xl font-semibold flex items-center justify-center">No results found</div>
+          <div className="flex h-96 items-center justify-center text-center text-2xl font-semibold">
+            No results found
+          </div>
         ) : (
-          <div className="grid gap-5">
+          <div className="grid grid-cols-2 gap-5">
             {filteredTemplates.map((template) => (
               <div
                 key={template.id}
-                className="flex flex-col gap-8 items-center justify-between bg-main p-3 px-6 rounded-lg"
+                className="flex flex-col items-center justify-between gap-8 rounded-lg bg-main p-5 px-6"
               >
                 <div className="text-3xl font-semibold">{template.name}</div>
                 <div
                   onClick={() => handleTemplateClick(template)}
-                  className="cursor-pointer bg-button rounded-lg py-2 px-4 text-white font-semibold"
+                  className="cursor-pointer rounded-lg bg-button px-4 py-2 font-semibold text-white"
                 >
                   Select
                 </div>

@@ -1,5 +1,3 @@
-// CertificationsInput.js
-
 import React from "react";
 
 const Certifications = ({
@@ -63,7 +61,7 @@ const Certifications = ({
           <label className={labelStyle}>
             <span className={labelTextStyle}>Description:</span>
             <textarea
-              className="rounded-lg min-h-36"
+              className="min-h-36 rounded-lg"
               name={`certifications[${index}].description`}
               value={certification?.description}
               onChange={(e) =>
@@ -82,7 +80,7 @@ const Certifications = ({
             />
           </label>
           <button
-            className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+            className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
             type="button"
             onClick={() => removeCertification(index)}
           >
@@ -91,7 +89,7 @@ const Certifications = ({
         </div>
       ))}
       <button
-        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+        className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
         type="button"
         onClick={addCertification}
       >

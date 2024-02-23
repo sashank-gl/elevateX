@@ -1,5 +1,3 @@
-// ProfessionalDetails.js
-
 import React from "react";
 
 const ProfessionalDetails = ({
@@ -80,7 +78,7 @@ const ProfessionalDetails = ({
           name="summary"
           value={formData?.summary}
           onChange={handleChange}
-          className="rounded-lg min-h-36"
+          className="min-h-36 rounded-lg"
         />
       </label>
 
@@ -95,7 +93,7 @@ const ProfessionalDetails = ({
               onChange={(e) => updateKeyword(index, e.target.value)}
             />
             <button
-              className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+              className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
               type="button"
               onClick={() => removeKeyword(index)}
             >
@@ -104,7 +102,7 @@ const ProfessionalDetails = ({
           </div>
         ))}
         <button
-          className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+          className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
           type="button"
           onClick={addKeyword}
         >

@@ -21,7 +21,7 @@ const Contact = ({ client, photo }) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTestimonialIndex((prevIndex) =>
-        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
+        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1,
       );
     }, 5000);
 
@@ -29,20 +29,20 @@ const Contact = ({ client, photo }) => {
   }, [testimonials.length]);
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center">
+    <div className="flex h-screen flex-col items-center justify-center">
       {testimonials.length > 0 && (
-        <div className="h-1/2 flex flex-col items-center justify-center">
+        <div className="flex h-1/2 flex-col items-center justify-center">
           <div>
-            <h1 className="text-4xl text-center font-bold">Testimonials</h1>
+            <h1 className="text-center text-4xl font-bold">Testimonials</h1>
             <motion.div
-              className="h-48 flex text-center justify-center items-center"
+              className="flex h-48 items-center justify-center text-center"
               key={currentTestimonialIndex}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <blockquote className="text-lg italic flex flex-col text-center justify-center items-center mx-56">
-                <p className="font-semibold mb-4">
+              <blockquote className="mx-56 flex flex-col items-center justify-center text-center text-lg italic">
+                <p className="mb-4 font-semibold">
                   "{testimonials[currentTestimonialIndex].review}"
                 </p>
                 <div className="flex gap-1">
@@ -54,18 +54,18 @@ const Contact = ({ client, photo }) => {
           </div>
         </div>
       )}
-      <div className="h-1/2 flex flex-col justify-between items-center pb-4">
+      <div className="flex h-1/2 flex-col items-center justify-between pb-4">
         <div>
           <div className="flex items-center justify-center gap-4">
             <div>
               {photo && (
-                <div className="h-40 w-40 rounded-full overflow-hidden">
+                <div className="h-40 w-40 overflow-hidden rounded-full">
                   <motion.img
                     whileHover={{ scale: 1.2 }}
                     transition={{ duration: 0.5 }}
                     src={photo}
                     alt="Profile"
-                    className="h-full w-full object-cover grayscale contrast-100"
+                    className="h-full w-full object-cover contrast-100 grayscale"
                   />
                 </div>
               )}
@@ -79,7 +79,7 @@ const Contact = ({ client, photo }) => {
           </div>
           <div>
             {client.contacts && (
-              <div className="flex gap-8 text-3xl justify-center mt-12">
+              <div className="mt-12 flex justify-center gap-8 text-3xl">
                 {client.contacts.email && (
                   <a href={`mailto:${client.contacts.email}`}>
                     <AiFillMail />

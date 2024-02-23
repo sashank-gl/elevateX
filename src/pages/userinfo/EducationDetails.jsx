@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const EducationDetails = ({
   education,
@@ -13,7 +13,7 @@ const EducationDetails = ({
   return (
     <div>
       {education.map((edu, index) => (
-        <div key={index} className="grid grid-cols-2 mb-4 gap-4">
+        <div key={index} className="mb-4 grid grid-cols-2 gap-4">
           <label className={labelStyle}>
             <span className={labelTextStyle}>Institution:</span>
             <input
@@ -58,23 +58,21 @@ const EducationDetails = ({
               onChange={(e) => handleChange(index, "startDate", e.target.value)}
             />
           </label>
-          <div className="flex items-center my-4">
+          <div className="my-4 flex items-center">
             <input
               type="checkbox"
               checked={edu.isPresentCollege}
               onChange={() => {
                 edu.isPresentCollege = !edu.isPresentCollege;
                 handleChange(index, "isPresentCollege", edu.isPresentCollege);
-                // Clear end date when checkbox is checked
                 if (edu.isPresentCollege) {
-                  edu.endDate = ""; // Set end date to an empty string
+                  edu.endDate = "";
                 }
               }}
-              className="mr-2 w-6 h-6 cursor-pointer"
+              className="mr-2 h-6 w-6 cursor-pointer"
             />
             <span>Currently Studying Here?</span>
           </div>
-          {/* Conditionally render end date input */}
           {!edu.isPresentCollege && (
             <label className={labelStyle}>
               <span className={labelTextStyle}>End Date:</span>
@@ -105,13 +103,12 @@ const EducationDetails = ({
               onChange={(e) =>
                 handleChange(index, "description", e.target.value)
               }
-              className="rounded-lg min-h-36"
+              className="min-h-36 rounded-lg"
             />
           </label>
-          {/* Similar input fields for other education details */}
-          <div className="col-span-2 flex justify-center items-center">
+          <div className="col-span-2 flex items-center justify-center">
             <button
-              className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+              className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
               type="button"
               onClick={() => removeEducation(index)}
             >
@@ -121,7 +118,7 @@ const EducationDetails = ({
         </div>
       ))}
       <button
-        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+        className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
         type="button"
         onClick={addEducation}
       >

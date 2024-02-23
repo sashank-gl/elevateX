@@ -4,7 +4,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { firebaseDB, storage } from "../firebaseConfig";
 import { UserAuth } from "../contexts/AuthContext";
 import { motion } from "framer-motion";
-import { AiOutlineLock } from "react-icons/ai";
 import { getDownloadURL, ref } from "firebase/storage";
 import PrivateUser from "../components/PrivateUser";
 
@@ -16,18 +15,33 @@ const Portfolio = () => {
   const [templateId, setTemplateId] = useState(null);
   const [templateName, setTemplateName] = useState(null);
 
-  console.log("Template ID: ", templateId);
-
   useEffect(() => {
     if (userId) {
-      const userDocRef = doc(firebaseDB, "users", userId);
+      const userDocRef = doc(firebaseDB, "userInfo", userId);
       getDoc(userDocRef)
         .then((docSnapshot) => {
           if (docSnapshot.exists()) {
             const clientData = docSnapshot.data();
             setClient(clientData);
-            setTemplateId(clientData?.templateId);
-            setTemplateName(clientData?.templateName);
+          } else {
+            console.log("User document does not exist");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user document:", error);
+        });
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId) {
+      const templateDocRef = doc(firebaseDB, "users", userId);
+      getDoc(templateDocRef)
+        .then((docSnapshot) => {
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            setTemplateId(userData?.templateId);
+            setTemplateName(userData?.templateName);
           } else {
             console.log("User document does not exist");
           }
@@ -56,8 +70,8 @@ const Portfolio = () => {
       return null;
     }
     const formattedTemplateName = templateName.replace(/\s/g, "");
-    const TemplateComponent = React.lazy(() =>
-      import(`../templates/${formattedTemplateName}`)
+    const TemplateComponent = React.lazy(
+      () => import(`../templates/${formattedTemplateName}`),
     );
 
     return (

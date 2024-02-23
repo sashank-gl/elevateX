@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 
 import {
   AiFillMail,
@@ -21,7 +20,7 @@ const Contact = ({ client, photo }) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTestimonialIndex((prevIndex) =>
-        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
+        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1,
       );
     }, 5000);
 
@@ -29,18 +28,18 @@ const Contact = ({ client, photo }) => {
   }, [testimonials.length]);
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center">
-      <div className="h-1/2 flex flex-col justify-end items-center">
-        <div className="text-4xl text-center text-abreeze-stroke font-bold">
+    <div className="flex h-screen flex-col items-center justify-center">
+      <div className="flex h-1/2 flex-col items-center justify-end">
+        <div className="text-center text-4xl font-bold text-abreeze-stroke">
           {client.callToActionText}
         </div>
         <div>
           {client.contacts && (
-            <div className="flex flex-col font-semibold gap-3 justify-center items-center mt-12">
+            <div className="mt-12 flex flex-col items-center justify-center gap-3 font-semibold">
               {client.contacts.email && (
                 <a
                   href={`mailto:${client.contacts.email}`}
-                  className="flex gap-3 items-center w-64 bg-abreeze-button text-abreeze-buttonText py-2 px-4 rounded-lg"
+                  className="flex w-64 items-center gap-3 rounded-lg bg-abreeze-button px-4 py-2 text-abreeze-buttonText"
                 >
                   <p className="w-1/6 text-xl">
                     <AiFillMail />
@@ -52,7 +51,7 @@ const Contact = ({ client, photo }) => {
                 <p>
                   <a
                     href={`tel:${client.contacts.phoneNumber}`}
-                    className="flex gap-3 items-center w-64 bg-abreeze-button text-abreeze-buttonText py-2 px-4 rounded-lg"
+                    className="flex w-64 items-center gap-3 rounded-lg bg-abreeze-button px-4 py-2 text-abreeze-buttonText"
                   >
                     <p className="w-1/6 text-xl">
                       <AiFillPhone />
@@ -65,7 +64,7 @@ const Contact = ({ client, photo }) => {
                 <p>
                   <a
                     href={`https://wa.me/${client.contacts.whatsApp}`}
-                    className="flex gap-3 items-center w-64 bg-abreeze-button text-abreeze-buttonText py-2 px-4 rounded-lg"
+                    className="flex w-64 items-center gap-3 rounded-lg bg-abreeze-button px-4 py-2 text-abreeze-buttonText"
                   >
                     <p className="w-1/6 text-xl">
                       <AiOutlineWhatsApp />
@@ -77,7 +76,7 @@ const Contact = ({ client, photo }) => {
             </div>
           )}
           {client.contacts && (
-            <div className="flex gap-8 text-3xl justify-center mt-12">
+            <div className="mt-12 flex justify-center gap-8 text-3xl">
               {client.contacts.linkedIn && (
                 <a href={client.contacts.linkedIn}>
                   <AiFillLinkedin />
@@ -112,7 +111,7 @@ const Contact = ({ client, photo }) => {
           )}
         </div>
       </div>
-      <div className="h-1/2 flex flex-col pb-4 justify-end">
+      <div className="flex h-1/2 flex-col justify-end pb-4">
         <p>ElevateX © {currentYear}, All Rights Reserved</p>
       </div>
     </div>

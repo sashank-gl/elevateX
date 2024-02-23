@@ -79,7 +79,6 @@ const PersonalDetails = ({ formData, setFormData }) => {
           />
         </label>
 
-
         <label className={labelStyle}>
           <span className={labelTextStyle}>WhatsApp:</span>
           <input
@@ -91,7 +90,6 @@ const PersonalDetails = ({ formData, setFormData }) => {
           />
         </label>
 
-        {/* Input fields for social media contacts */}
         <label className={labelStyle}>
           <span className={labelTextStyle}>LinkedIn:</span>
           <input

@@ -1,17 +1,10 @@
 import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import { UserAuth } from "../contexts/AuthContext";
-import { isRouteErrorResponse, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Loader from "../components/Loader";
-import {
-  collection,
-  doc,
-  getDocs,
-  query,
-  where,
-  onSnapshot,
-} from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { firebaseDB } from "../firebaseConfig";
 
 const GoogleSignIn = () => {
@@ -69,11 +62,10 @@ const GoogleSignIn = () => {
 
   const [filteredPublicUsers, setFilteredPublicUsers] = useState([]);
 
-
   useEffect(() => {
     const publicUsersRef = query(
       collection(firebaseDB, "publicUsers"),
-      where("isPublic", "==", true)
+      where("isPublic", "==", true),
     );
     setIsTestimonialLoading(true);
     const unsubscribe = onSnapshot(publicUsersRef, (querySnapshot) => {
@@ -108,9 +100,9 @@ const GoogleSignIn = () => {
   };
 
   const rotateTestimonials = () => {
-    const newIndex = (currentTestimonialIndex + 1) % filteredPublicUsers.length; // Use filteredPublicUsers.length instead of publicUsers.length
+    const newIndex = (currentTestimonialIndex + 1) % filteredPublicUsers.length;
     setCurrentTestimonialIndex(newIndex);
-    setActiveTestimonial(filteredPublicUsers[newIndex]); // Set activeTestimonial from filteredPublicUsers
+    setActiveTestimonial(filteredPublicUsers[newIndex]);
   };
 
   const handleTestimonialChange = (direction) => {
@@ -128,27 +120,28 @@ const GoogleSignIn = () => {
       initial="hidden"
       animate="visible"
       variants={parentVariants}
-      className="h-screen flex text-paragraph"
+      className="flex h-screen text-paragraph"
     >
       {/* Left Section - Benefits and Features */}
-      <motion.div className="w-1/2 flex flex-col text-center justify-center items-center bg-paragraph text-background gap-6 p-10">
-        <motion.h2 variants={childVariants} className="text-4xl font-bold mb-6">
+
+      <motion.div className="flex w-1/2 flex-col items-center justify-center gap-6 bg-paragraph p-10 text-center text-background">
+        <motion.h2 variants={childVariants} className="mb-6 text-4xl font-bold">
           What is ElevateX?
         </motion.h2>
-        <motion.p variants={childVariants} className="text-xl mb-4">
+        <motion.p variants={childVariants} className="mb-4 text-xl">
           Tired of spending hours building and maintaining your portfolio?
           ElevateX takes the hassle out, letting you showcase your skills and
           projects in minutes.
         </motion.p>
-        <motion.h1 variants={childVariants} className="text-4xl mb-4 font-bold">
+        <motion.h1 variants={childVariants} className="mb-4 text-4xl font-bold">
           ElevateX offers:
         </motion.h1>
         <motion.div
           variants={childVariants}
-          className="text-xl list-none pl-5 mb-4"
+          className="mb-4 list-none pl-5 text-xl"
         >
           <motion.div>
-            <p className="italic my-2">
+            <p className="my-2 italic">
               <span className="font-semibold">
                 Quick and easy website creation:{" "}
               </span>
@@ -156,19 +149,19 @@ const GoogleSignIn = () => {
             </p>
           </motion.div>
           <motion.div>
-            <p className="italic my-2">
+            <p className="my-2 italic">
               <span className="font-semibold">Professional templates: </span>
               Choose from a variety of modern and stylish designs.
             </p>
           </motion.div>
           <motion.div>
-            <p className="italic my-2">
+            <p className="my-2 italic">
               <span className="font-semibold">Effortless customization: </span>
               Add your personal touch with ease.
             </p>
           </motion.div>
           <motion.div>
-            <p className="italic my-2">
+            <p className="my-2 italic">
               <span className="font-semibold">
                 Free with your chosen subdomain:{" "}
               </span>
@@ -176,7 +169,7 @@ const GoogleSignIn = () => {
             </p>
           </motion.div>
         </motion.div>
-        <motion.h2 variants={childVariants} className="text-4xl font-bold mb-6">
+        <motion.h2 variants={childVariants} className="mb-6 text-4xl font-bold">
           Who is ElevateX for?
         </motion.h2>
         <motion.p variants={childVariants} className="text-xl">
@@ -185,41 +178,42 @@ const GoogleSignIn = () => {
         </motion.p>
       </motion.div>
 
-      {/* Right Section - Sign-in Form */}
+      {/* Right Section - Sign-in Form & Reviews*/}
+
       <motion.div className="w-1/2 bg-background">
         <motion.div
           initial={{ y: -200 }}
           animate={{ y: 0 }}
           transition={{ duration: 1 }}
-          className="h-1/2 flex flex-col justify-end items-center p-10"
+          className={`flex h-1/2 flex-col items-center justify-end p-10`}
         >
-          <h1 className="text-4xl font-bold mb-8">
+          <h1 className="mb-8 text-4xl font-bold">
             Effortless Portfolio Creation Starts Here
           </h1>
-          <h2 className="text-2xl mb-12">Join ElevateX Now</h2>
+          <h2 className="mb-12 text-2xl">Join ElevateX Now</h2>
           <button
             onClick={handleSignInWithGoogle}
-            className="w-80 h-16 bg-button hover:bg-stroke text-background text-xl font-semibold rounded-lg transition duration-300"
+            className="h-16 w-80 rounded-lg bg-button text-xl font-semibold text-background transition duration-300 hover:bg-stroke"
           >
             Sign In With Google
           </button>
         </motion.div>
 
-        <div className="h-1/2 flex flex-col justify-center">
-          <h1 className="text-2xl text-center font-bold mt-12 mb-8">
+        <div className="flex h-1/2 flex-col justify-center">
+          <h1 className="mb-8 mt-12 text-center text-2xl font-bold">
             Fellow Developer Experiences
           </h1>
           {!isTestimonialLoading ? (
             <>
               <motion.div
-                className="flex text-center justify-center items-center"
+                className="flex items-center justify-center text-center"
                 key={currentTestimonialIndex}
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.8 }}
               >
-                <blockquote className="w-[40rem] text-lg italic flex flex-col text-center items-center">
+                <blockquote className="flex w-[40rem] flex-col items-center justify-center text-center text-lg italic">
                   {filteredPublicUsers &&
                     filteredPublicUsers.length > 0 &&
                     activeTestimonial &&
@@ -228,11 +222,11 @@ const GoogleSignIn = () => {
                         {activeTestimonial.photo && (
                           <img
                             src={activeTestimonial.photo}
-                            className="w-20 h-20 object-cover rounded-full mb-2"
+                            className="mb-2 h-20 w-20 rounded-full object-cover"
                             alt="User"
                           />
                         )}
-                        <div className="flex flex-col gap-2 items-start">
+                        <div className="flex flex-col items-center gap-2">
                           <div className="flex gap-1">
                             {activeTestimonial.review.stars &&
                               Array.from({
@@ -258,15 +252,15 @@ const GoogleSignIn = () => {
                 </blockquote>
               </motion.div>
 
-              <div className="flex justify-center mt-8 gap-12">
+              <div className="mt-8 flex justify-center gap-12">
                 <button
-                  className="hover:bg-main p-2 rounded-full"
+                  className="rounded-full p-2 hover:bg-main"
                   onClick={() => handleTestimonialChange(-1)}
                 >
                   <FaChevronLeft />
                 </button>
                 <button
-                  className="hover:bg-main p-2 rounded-full"
+                  className="rounded-full p-2 hover:bg-main"
                   onClick={() => handleTestimonialChange(1)}
                 >
                   <FaChevronRight />

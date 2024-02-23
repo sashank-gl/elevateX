@@ -2,9 +2,8 @@ import { motion } from "framer-motion";
 import { AiOutlineLock } from "react-icons/ai";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { collection, doc, getDoc, query, where } from "firebase/firestore";
-import { firebaseDB, storage } from "../firebaseConfig";
-import { UserAuth } from "../contexts/AuthContext";
+import { doc, getDoc } from "firebase/firestore";
+import { firebaseDB } from "../firebaseConfig";
 
 const PrivateUser = () => {
   const [client, setClient] = useState(null);
@@ -12,7 +11,6 @@ const PrivateUser = () => {
 
   useEffect(() => {
     if (userId) {
-      // Fetch the portfolio data for the specified user
       const userDocRef = doc(firebaseDB, "users", userId);
       getDoc(userDocRef)
         .then((docSnapshot) => {
@@ -35,7 +33,7 @@ const PrivateUser = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-4 bg-yellow-200 p-4 rounded-lg"
+          className="mb-4 rounded-lg bg-yellow-200 p-4"
         >
           <p className="text-5xl">
             {client.firstName} {client.lastName}
@@ -45,7 +43,7 @@ const PrivateUser = () => {
               <AiOutlineLock />
             </span>
             <div>
-              <p className="font-semibold text-gray-700 mb-2">
+              <p className="mb-2 font-semibold text-gray-700">
                 Private Profile
               </p>
               <p className="text-gray-800">

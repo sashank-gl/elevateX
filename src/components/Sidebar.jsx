@@ -17,7 +17,6 @@ const Sidebar = () => {
       console.log(error);
     }
   };
-  const [showTemplates, setShowTemplates] = useState(false);
 
   useEffect(() => {
     const fetchUserPhoto = async () => {
@@ -30,23 +29,23 @@ const Sidebar = () => {
       }
     };
     fetchUserPhoto();
-  }, []);
+  }, [photo]);
 
   return (
-    <div className="h-screen p-4 flex flex-col justify-between">
+    <div className="flex h-screen flex-col justify-between border-r border-tertiary p-4">
       <div>
         <motion.h1 className="text-3xl font-extrabold ">
           Elevate<span className="text-tertiary">X</span>
         </motion.h1>
-        <div className="flex flex-col justify-center items-center p-4 gap-6">
+        <div className="flex flex-col items-center justify-center gap-6 p-4">
           {photo && (
-            <div className="rounded-full h-48 w-48 overflow-hidden">
+            <div className="h-48 w-48 overflow-hidden rounded-full">
               <motion.img
                 whileHover={{ scale: 1.15 }}
                 transition={{ duration: 0.5 }}
                 src={photo}
                 alt="Profile"
-                className="rounded-full object-cover h-full w-full"
+                className="h-full w-full rounded-full object-cover"
               />
             </div>
           )}
@@ -56,24 +55,24 @@ const Sidebar = () => {
       <div className="flex flex-col gap-3  font-semibold">
         <Link
           to="/"
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
+          className="rounded-r-full from-stroke from-50% px-6 py-2 text-center hover:bg-gradient-to-l hover:text-highlight"
         >
           Home
         </Link>
         <Link
           to="/profile"
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
+          className="rounded-r-full from-stroke from-50% px-6 py-2 text-center hover:bg-gradient-to-l hover:text-highlight"
         >
           My Profile
         </Link>
         <Link
           to="/edit-profile"
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
+          className="rounded-r-full from-stroke from-50% px-6 py-2 text-center hover:bg-gradient-to-l hover:text-highlight"
         >
           Edit Profile
         </Link>
         <Link
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
+          className="rounded-r-full from-stroke from-50% px-6 py-2 text-center hover:bg-gradient-to-l hover:text-highlight"
           to={`/${user.uid}`}
         >
           My Portfolio
@@ -81,22 +80,25 @@ const Sidebar = () => {
 
         <Link
           to="/templates"
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
+          className="rounded-r-full from-stroke from-50% px-6 py-2 text-center hover:bg-gradient-to-l hover:text-highlight"
         >
           Templates
         </Link>
         <Link
           to="/review"
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
+          className="rounded-r-full from-stroke from-50% px-6 py-2 text-center hover:bg-gradient-to-l hover:text-highlight"
         >
           Leave a Review
         </Link>
-        <Link to='/donate' className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight">
+        <Link
+          to="/donate"
+          className="rounded-r-full from-stroke from-50% px-6 py-2 text-center hover:bg-gradient-to-l hover:text-highlight"
+        >
           Buy Me a Coffee
         </Link>
         <button
           onClick={handleSignOutWithGoogle}
-          className="hover:bg-gradient-to-l from-stroke from-50% rounded-r-full py-2 px-6 text-center hover:text-highlight"
+          className="rounded-r-full from-stroke from-50% px-6 py-2 text-center hover:bg-gradient-to-l hover:text-highlight"
         >
           Sign Out
         </button>

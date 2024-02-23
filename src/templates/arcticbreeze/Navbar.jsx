@@ -1,9 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 const Navbar = ({ client }) => {
   return (
-    <div className="fixed top-0 right-0 rounded-bl-full h-16 px-6 pl-10 py-2 bg-abreeze-background text-stroke font-semibold flex items-center justify-between w-full">
+    <div className="fixed right-0 top-0 flex h-16 w-full items-center justify-between rounded-bl-full bg-abreeze-background px-6 py-2 pl-10 font-semibold text-stroke">
       <div>{client.brandName || client.firstName}</div>
       <nav className="flex gap-4">
         <a href="#about">About Me</a>

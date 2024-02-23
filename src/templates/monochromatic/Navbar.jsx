@@ -1,16 +1,15 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
 
 const Navbar = () => {
   return (
-    <div className='fixed top-0 right-0 bg-black rounded-bl-full h-16 px-6 pl-10 py-2 text-white font-semibold flex items-center justify-end'>
-        <nav className='flex gap-4'>
-            <a href='#about'>About Me</a>
-            <a href='#work'>My Work</a>
-            <a href='#contact'>Contact Me</a>
-        </nav>
+    <div className="fixed right-0 top-0 flex h-16 items-center justify-end rounded-bl-full bg-black px-6 py-2 pl-10 font-semibold text-white">
+      <nav className="flex gap-4">
+        <a href="#about">About Me</a>
+        <a href="#work">My Work</a>
+        <a href="#contact">Contact Me</a>
+      </nav>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

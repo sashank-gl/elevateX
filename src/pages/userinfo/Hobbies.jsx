@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 
 const Hobbies = ({ hobbies, addHobby, removeHobby, updateHobby }) => {
-  const labelStyle = "flex gap-4 my-1";
-  const labelTextStyle = "my-1 w-40";
   const inputStyle = "h-10 rounded-lg p-1";
   return (
     <div>
       {hobbies?.map((hobby, index) => (
-        <div key={index} className="flex mb-4 gap-4">
+        <div key={index} className="mb-4 flex gap-4">
           <input
             className={inputStyle}
             type="text"
@@ -16,7 +14,7 @@ const Hobbies = ({ hobbies, addHobby, removeHobby, updateHobby }) => {
           />
 
           <button
-            className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+            className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
             type="button"
             onClick={() => removeHobby(index)}
           >
@@ -25,7 +23,7 @@ const Hobbies = ({ hobbies, addHobby, removeHobby, updateHobby }) => {
         </div>
       ))}
       <button
-        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+        className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
         type="button"
         onClick={addHobby}
       >

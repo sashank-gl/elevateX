@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { UserAuth } from "../contexts/AuthContext";
 import { motion } from "framer-motion";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { firebaseDB, storage } from "../firebaseConfig";
+import { doc, updateDoc } from "firebase/firestore";
+import { firebaseDB } from "../firebaseConfig";
 
 const Review = () => {
   const { user } = UserAuth();
@@ -47,10 +47,12 @@ const Review = () => {
       console.error("Error updating review:", error);
     }
   };
+
   const labelStyle = "flex gap-4 my-1";
+
   return (
-    <div className="flex flex-col justify-center items-center py-20">
-      <div className="text-center flex flex-col gap-6 mb-12">
+    <div className="flex flex-col items-center justify-center py-20">
+      <div className="mb-12 flex flex-col gap-6 text-center">
         <p className="text-5xl font-bold">Every piece of feedback counts!</p>
         <p className="text-3xl font-semibold">
           Share your honest thoughts, big or small, and help us make ElevateX
@@ -63,7 +65,7 @@ const Review = () => {
         transition={{ duration: 0.5 }}
         className="p-6"
       >
-        <form onSubmit={handleSubmit} className="w-[36rem] flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="flex w-[36rem] flex-col gap-3">
           <label className={`${labelStyle} items-center`}>
             <span className={`font-semibold`}>Rating:</span>
             <div className="">
@@ -85,8 +87,9 @@ const Review = () => {
             <span className={`font-semibold`}>Review:</span>
             <textarea
               value={review.text}
+              name="text"
               onChange={handleChange}
-              className="rounded-lg min-h-24 p-3 focus:outline-none focus:ring-4 focus:ring-main"
+              className="min-h-24 rounded-lg p-3 focus:outline-none focus:ring-4 focus:ring-main"
               placeholder="Enter your review..."
               required
             />
@@ -95,14 +98,15 @@ const Review = () => {
             <span className={`font-semibold`}>Extended Feedback:</span>
             <textarea
               value={review.feedback}
+              name="feedback"
               onChange={handleChange}
-              className="rounded-lg min-h-48 p-3 focus:outline-none focus:ring-4 focus:ring-main"
+              className="min-h-48 rounded-lg p-3 focus:outline-none focus:ring-4 focus:ring-main"
               placeholder="Enter your extended feedback..."
             />
           </label>
           <button
             type="submit"
-            className="w-full font-semibold text-xl py-2 px-4 rounded-lg bg-button text-highlight"
+            className="w-full rounded-lg bg-button px-4 py-2 text-xl font-semibold text-highlight"
           >
             Submit Review
           </button>

@@ -14,8 +14,8 @@ import Projects from "./userinfo/Projects";
 import Certifications from "./userinfo/Certifications";
 import Testimonials from "./userinfo/Testimonials";
 import Hobbies from "./userinfo/Hobbies";
-import UserDetails from "./UserDetails";
 import Loader from "../components/Loader";
+import { FaCamera } from "react-icons/fa6";
 
 const UserInfo = () => {
   const { user } = UserAuth();
@@ -45,8 +45,6 @@ const UserInfo = () => {
     portfolioGoal: "",
     summary: "",
     keywords: [],
-
-    // Based on the goal, some parts of the portfolio might be highlighted (e.g., attracting job offers, showcasing skills, establishing freelance presence).
     experience: [
       {
         companyName: "",
@@ -109,28 +107,22 @@ const UserInfo = () => {
     uniqueUrl: `${BASE_URL}/${user.uid}`,
     templateId: "monochromatic",
     templateName: "Monochromatic",
-    isPublic: false,
+    uid: user.uid,
   });
+
   const [photo, setPhoto] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
-  const [isPublic, setIsPublic] = useState(userDetails?.isPublic ?? false);
-  console.log("Visibility: ", isPublic);
 
   useEffect(() => {
     if (user) {
-      const docRef = doc(firebaseDB, "users", user.uid);
+      const docRef = doc(firebaseDB, "userInfo", user.uid);
 
       getDoc(docRef)
         .then((docSnapshot) => {
           if (docSnapshot.exists()) {
             setUserDetails(docSnapshot.data());
             setFormData(docSnapshot.data());
-            if (docSnapshot.data().isPublic !== isPublic) {
-              setIsPublic(docSnapshot.data().isPublic);
-            }
             fetchUserPhoto(user.uid);
-          } else {
-            setIsPublic(false);
           }
         })
         .catch((error) => {
@@ -161,15 +153,10 @@ const UserInfo = () => {
       await updateDoc(doc(firebaseDB, "publicUsers", user.uid), {
         isPublic: true,
       });
-
-      // Update local state and UI
-      setFormData((prevFormData) => ({ ...prevFormData, isPublic: true }));
-      setIsPublic(true);
-      console.log("Profile successfully made public.");
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);
-        setIsVisibilityChanging(false); // Close loading state
+        setIsVisibilityChanging(false);
       }, 1000);
     } catch (error) {
       console.error("Error making profile public:", error);
@@ -186,14 +173,10 @@ const UserInfo = () => {
       await updateDoc(doc(firebaseDB, "publicUsers", user.uid), {
         isPublic: false,
       });
-      // Update local state and UI
-      setFormData((prevFormData) => ({ ...prevFormData, isPublic: false }));
-      setIsPublic(false);
-      console.log("Profile successfully made private.");
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);
-        setIsVisibilityChanging(false); // Close loading state
+        setIsVisibilityChanging(false);
       }, 1000);
     } catch (error) {
       console.error("Error making profile private:", error);
@@ -210,7 +193,7 @@ const UserInfo = () => {
 
   const removeHobby = (index) => {
     const updatedHobbies = formData.hobbies.filter(
-      (_keyword, _index) => _index !== index
+      (_keyword, _index) => _index !== index,
     );
 
     setFormData((prevFormData) => ({
@@ -219,7 +202,6 @@ const UserInfo = () => {
     }));
   };
 
-  // Update keyword
   const updateHobby = (index, value) => {
     const updatedHobbies = [...formData.hobbies];
     updatedHobbies[index] = value;
@@ -240,7 +222,7 @@ const UserInfo = () => {
 
   const toggleComponent = (index) => {
     setIsOpen((prevOpen) =>
-      prevOpen.map((isOpen, i) => (i === index ? !isOpen : false))
+      prevOpen.map((isOpen, i) => (i === index ? !isOpen : false)),
     );
   };
 
@@ -304,7 +286,6 @@ const UserInfo = () => {
     });
   };
 
-  // Remove skill at index
   const removeCertification = (index) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -338,10 +319,8 @@ const UserInfo = () => {
       console.log("User added to publicUsers collection successfully");
     } catch (error) {
       console.error("Error adding user to publicUsers:", error);
-      // Handle errors appropriately
     }
 
-    // Check for changes and only update changed fields
     const updatedData = { ...formData };
     for (const field of Object.keys(formData)) {
       if (formData[field] !== userDetails?.[field]) {
@@ -355,17 +334,14 @@ const UserInfo = () => {
     }
 
     try {
-      const docRef = doc(firebaseDB, "users", user.uid);
+      const docRef = doc(firebaseDB, "userInfo", user.uid);
 
-      // Ensure data is fetched before checking existence
       const userDoc = await getDoc(docRef);
 
       if (!userDoc.exists()) {
-        // Create the document if it doesn't exist
         await setDoc(docRef, updatedData, { merge: true });
         console.log("User Info and URL updated successfully");
       } else {
-        // Update the document using either uid or actual document ID
         await updateDoc(docRef, updatedData);
         console.log("Personal Details updated successfully");
       }
@@ -377,7 +353,6 @@ const UserInfo = () => {
     } catch (error) {
       console.error("Error updating details:", error);
       setIsSubmitting(false);
-      // Handle error and inform user appropriately
     }
   };
 
@@ -385,10 +360,10 @@ const UserInfo = () => {
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
-  const [uploadStatus, setUploadStatus] = useState("Upload Photo"); // Initial button text
+  const [uploadStatus, setUploadStatus] = useState("Upload Photo");
 
   const handlePhotoUpload = async () => {
-    if (!selectedFile) return; // Handle no file selected
+    if (!selectedFile) return;
 
     const storageRef = ref(storage, `users/${user.uid}/profile_photo`);
     try {
@@ -403,13 +378,10 @@ const UserInfo = () => {
       }, 2000);
     } catch (error) {
       console.error("Error uploading photo:", error);
-      setUploadStatus("Error"); // Set button text to 'Error'
+      setUploadStatus("Error");
     }
   };
 
-  // Handle change for Skills component
-
-  // Add new skill
   const addSkill = () => {
     setFormData((prevState) => ({
       ...prevState,
@@ -420,7 +392,6 @@ const UserInfo = () => {
     }));
   };
 
-  // Remove skill at index
   const removeSkill = (index) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -455,7 +426,7 @@ const UserInfo = () => {
 
   const removeExperience = (index) => {
     const updatedExperience = formData.experience.filter(
-      (_exp, _index) => _index !== index
+      (_exp, _index) => _index !== index,
     );
     setFormData({
       ...formData,
@@ -474,7 +445,7 @@ const UserInfo = () => {
 
   const addResponsibility = (expIndex) => {
     const updatedExperience = [...formData.experience];
-    updatedExperience[expIndex].responsibilities.push(""); // Add an empty responsibility
+    updatedExperience[expIndex].responsibilities.push("");
     setFormData({
       ...formData,
       experience: updatedExperience,
@@ -483,7 +454,7 @@ const UserInfo = () => {
 
   const removeResponsibility = (expIndex, respIndex) => {
     const updatedExperience = [...formData.experience];
-    updatedExperience[expIndex].responsibilities.splice(respIndex, 1); // Remove responsibility at respIndex
+    updatedExperience[expIndex].responsibilities.splice(respIndex, 1);
     setFormData({
       ...formData,
       experience: updatedExperience,
@@ -530,7 +501,7 @@ const UserInfo = () => {
 
   const removeProject = (index) => {
     const updatedProjects = formData.projects.filter(
-      (_project, _index) => _index !== index
+      (_project, _index) => _index !== index,
     );
     setFormData({
       ...formData,
@@ -573,7 +544,6 @@ const UserInfo = () => {
     });
   };
 
-  // Add keyword
   const addKeyword = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -581,10 +551,9 @@ const UserInfo = () => {
     }));
   };
 
-  // Remove keyword
   const removeKeyword = (index) => {
     const updatedKeywords = formData.keywords.filter(
-      (_keyword, _index) => _index !== index
+      (_keyword, _index) => _index !== index,
     );
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -592,7 +561,6 @@ const UserInfo = () => {
     }));
   };
 
-  // Update keyword
   const updateKeyword = (index, value) => {
     const updatedKeywords = [...formData.keywords];
     updatedKeywords[index] = value;
@@ -601,20 +569,22 @@ const UserInfo = () => {
       keywords: updatedKeywords,
     }));
   };
+
+  const [hoverPhoto, setHoverPhoto] = useState(false);
   const headingStyle = `text-4xl font-bold text-center py-3 italic rounded-full cursor-pointer hover:bg-stroke hover:text-white`;
   return (
-    <div className="h-full overflow-y-auto flex flex-col text-xl">
+    <div className="custom-scrollbar flex h-full flex-col overflow-y-auto text-xl">
       {isSubmitting && (
-        <div className="fixed inset-0 h-screen bg-background/50 z-10 backdrop-blur-md flex flex-col gap-12 justify-center items-center">
+        <div className="fixed inset-0 z-10 flex h-screen flex-col items-center justify-center gap-12 bg-background/50 backdrop-blur-md">
           <Loader />
-          <p className="text-2xl font-semibold animate-pulse">Saving Changes</p>
+          <p className="animate-pulse text-2xl font-semibold">Saving Changes</p>
         </div>
       )}
 
       {showSuccess && (
-        <div className="fixed inset-0 h-screen bg-background/50 z-10 backdrop-blur-md flex flex-col gap-12 justify-center items-center">
+        <div className="fixed inset-0 z-10 flex h-screen flex-col items-center justify-center gap-12 bg-background/50 backdrop-blur-md">
           {/* <Loader /> */}
-          <p className="text-2xl font-semibold animate-pulse">Success!</p>
+          <p className="animate-pulse text-2xl font-semibold">Success!</p>
         </div>
       )}
 
@@ -622,68 +592,86 @@ const UserInfo = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col gap-4 rounded-lg m-12 p-8"
+        className="m-12 flex flex-col gap-4 rounded-lg p-8"
       >
         <div className="flex items-center justify-start gap-8">
-          {photo && (
-            <div>
-              <img
-                src={photo}
-                alt="Profile"
-                className="rounded-lg object-cover h-56 w-56 mx-auto"
-              />
-            </div>
-          )}
-          <label className="flex flex-col gap-4 italic text-slate-500">
-            Click "Choose File" to add/update Profile Picture
+          <label className="flex flex-col gap-4">
+            {photo ? (
+              <div
+                className="relative"
+                onMouseEnter={() => setHoverPhoto(true)}
+                onMouseLeave={() => setHoverPhoto(false)}
+              >
+                <img
+                  src={photo}
+                  alt="Profile"
+                  className="mx-auto size-56 rounded-lg object-cover"
+                />
+
+                {hoverPhoto && (
+                  <div className="absolute left-0 top-0 flex size-56 cursor-pointer items-center justify-center rounded-lg bg-black/40 text-center text-white">
+                    <div className="flex flex-col items-center justify-center gap-4">
+                      <FaCamera fontSize={28} />
+                      {photo ? "Update Picture" : "Upload Picture"}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Loader />
+            )}
             <input
               type="file"
               id="photoInput"
               name="photo"
+              className="hidden"
               onChange={handleFileChange}
             />
             {selectedFile && (
-              <button
-                className="bg-button text-highlight font-semibold p-2 rounded-lg px-4"
-                onClick={handlePhotoUpload}
-                disabled={
-                  uploadStatus === "Uploading..." ||
-                  uploadStatus === "Uploaded!"
-                }
-              >
-                {uploadStatus}
-              </button>
+              <>
+                {selectedFile.name}
+                <button
+                  className="rounded-lg bg-button p-2 px-4 font-semibold text-highlight"
+                  onClick={handlePhotoUpload}
+                  disabled={
+                    uploadStatus === "Uploading..." ||
+                    uploadStatus === "Uploaded!"
+                  }
+                >
+                  {uploadStatus}
+                </button>
+              </>
             )}
           </label>
-          {formData.isPublic ? (
+          {user.isPublic ? (
             <button
-              className="bg-button hover:bg-stroke p-2 px-4 text-highlight font-semibold rounded-lg"
+              className="rounded-lg bg-button p-2 px-4 font-semibold text-highlight hover:bg-stroke"
               onClick={makeProfilePrivate}
               disabled={isVisibilityChanging}
             >
               {showSuccess
                 ? "Success"
                 : isVisibilityChanging
-                ? "Processing..."
-                : "Make Profile Private"}
+                  ? "Processing..."
+                  : "Make Profile Private"}
             </button>
           ) : (
             <button
-              className="bg-button hover:bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
+              className="rounded-lg bg-button p-2 px-4 font-semibold text-white hover:bg-stroke"
               onClick={makeProfilePublic}
               disabled={isVisibilityChanging}
             >
               {showSuccess
                 ? "Success"
                 : isVisibilityChanging
-                ? "Processing..."
-                : "Make Profile Public"}
+                  ? "Processing..."
+                  : "Make Profile Public"}
             </button>
           )}
         </div>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-3 p-8 px-12 rounded-lg  min-w-96"
+          className="flex min-w-96 flex-col gap-3 rounded-lg p-8  px-12"
         >
           <h1 onClick={() => toggleComponent(0)} className={headingStyle}>
             Personal Details
@@ -715,8 +703,6 @@ const UserInfo = () => {
             Professional Details
           </h1>
           {isOpen[3] && (
-            // Pass these functions as props to ProfessionalDetails component
-
             <ProfessionalDetails
               formData={formData}
               handleChange={handleChange}
@@ -796,10 +782,10 @@ const UserInfo = () => {
             />
           )}
 
-          <div className="flex gap-4 justify-center">
+          <div className="flex justify-center gap-4">
             <button
               type="submit"
-              className="bg-button hover:bg-stroke p-2 px-4 text-white font-semibold rounded-lg"
+              className="rounded-lg bg-button p-2 px-4 font-semibold text-white hover:bg-stroke"
             >
               Save Changes
             </button>

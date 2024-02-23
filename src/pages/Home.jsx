@@ -2,32 +2,22 @@ import { IoMdShare } from "react-icons/io";
 import { IoMdMail } from "react-icons/io";
 import React, { useEffect, useState } from "react";
 import { UserAuth } from "../contexts/AuthContext";
-import UserInfo from "./UserInfo";
-import Sidebar from "../components/Sidebar";
 import Search from "../components/Search";
-import { easeIn, easeInOut, easeOut, motion } from "framer-motion";
+import { easeInOut, motion } from "framer-motion";
 import { IoMdArrowDropright } from "react-icons/io";
-import {
-  collection,
-  doc,
-  getDocs,
-  query,
-  where,
-  onSnapshot,
-} from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { firebaseDB } from "../firebaseConfig";
 import { Link } from "react-router-dom";
 import Share from "../components/Share";
 
 const Home = () => {
-  const { user } = UserAuth();
   const [publicUsers, setPublicUsers] = useState([]);
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
 
   useEffect(() => {
     const publicUsersRef = query(
       collection(firebaseDB, "publicUsers"),
-      where("isPublic", "==", true)
+      where("isPublic", "==", true),
     );
 
     onSnapshot(publicUsersRef, (querySnapshot) => {
@@ -50,7 +40,7 @@ const Home = () => {
         <div className="flex gap-3">
           <div
             onClick={() => setIsShareDialogOpen(!isShareDialogOpen)}
-            className="bg-button rounded-full h-10 w-10 flex justify-center items-center text-2xl text-highlight cursor-pointer"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-button text-2xl text-highlight"
           >
             <IoMdShare />
           </div>
@@ -58,25 +48,25 @@ const Home = () => {
       </div>
       {isShareDialogOpen && <Share handleShareDialog={handleShareDialog} />}
       <div>
-        <div className="font-bold text-4xl">
+        <div className="text-4xl font-bold">
           Elevate Your Career. Build Your Developer Portfolio in Minutes.
         </div>
-        <div className="text-xl my-8 flex flex-col gap-3">
-          <div className="flex gap-2 items-center">
+        <div className="my-8 flex flex-col gap-3 text-xl">
+          <div className="flex items-center gap-2">
             <IoMdArrowDropright fontSize={36} />
             <p>
               Ditch the coding and design struggles. Create a professional
               developer portfolio instantly with ElevateX.
             </p>
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2">
             <IoMdArrowDropright fontSize={36} />
             <p>
               Choose from stunning templates, personalize with ease, and impress
               potential employers.
             </p>
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2">
             <IoMdArrowDropright fontSize={36} />
             <p>
               Join a thriving community of developers showcasing their skills
@@ -88,11 +78,11 @@ const Home = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
-          className="flex justify-center w-3/4"
+          className="flex w-3/4 justify-center"
         >
           <Link
             to="/edit-profile"
-            className="bg-button text-2xl text-highlight font-bold py-2 px-4 rounded-lg"
+            className="rounded-lg bg-button px-4 py-2 text-2xl font-bold text-highlight"
           >
             Create Your Portfolio Now
           </Link>
@@ -100,41 +90,39 @@ const Home = () => {
       </div>
 
       <div className="p-6">
-        {/* All Users */}
         <div className="grid grid-cols-4 gap-12">
           {publicUsers?.map((user) => (
-            // Each User
             <motion.div
               whileHover={{ y: -20 }}
               transition={{ ease: easeInOut }}
-              className="bg-main h-[26rem] flex flex-col rounded-lg"
+              className="flex h-[26rem] flex-col rounded-lg bg-main"
             >
-              <div className="relative h-3/6">
+              <div key={user.uniqueUrl} className="relative h-3/6">
                 <img
                   src={user.photo}
-                  className="h-full w-full object-cover rounded-t-lg"
+                  className="h-full w-full rounded-t-lg object-cover"
                 />
               </div>
-              <div className="flex flex-col gap-4 mt-4">
-                <p className="text-3xl font-semibold text-center">
+              <div className="mt-4 flex flex-col gap-4">
+                <p className="text-center text-3xl font-semibold">
                   {user.name}
                 </p>
-                <p className="font-semibold text-lg text-center uppercase">
+                <p className="text-center text-lg font-semibold uppercase">
                   {user.title}
                 </p>
                 <div className="flex justify-evenly">
                   <a
                     href={user.uniqueUrl}
-                    className="bg-button text-highlight py-2 px-4 rounded-lg"
+                    className="rounded-lg bg-button px-4 py-2 text-highlight hover:bg-stroke"
                   >
                     Know More
                   </a>
-                  <a
-                    href={user.uniqueUrl}
-                    className="bg-button text-highlight py-2 px-4 rounded-lg"
+                  <motion.a
+                    href={`mailto:${user.email}`}
+                    className="rounded-lg bg-button px-4 py-2 text-highlight hover:bg-stroke"
                   >
                     <IoMdMail fontSize={22} />
-                  </a>
+                  </motion.a>
                 </div>
               </div>
             </motion.div>

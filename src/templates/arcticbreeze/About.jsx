@@ -1,12 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 const About = ({ client, photo }) => {
-  const { firstName, lastName, professionalTitle, tagline, summary } = client;
+  const { firstName, professionalTitle, summary } = client;
   return (
-    <div className="h-screen px-12 flex items-center">
+    <div className="flex h-screen items-center px-12">
       {client && (
-        <div className="flex gap-12 items-center">
-          <div className="w-2/3 flex flex-col gap-5 justify-center">
+        <div className="flex items-center gap-12">
+          <div className="flex w-2/3 flex-col justify-center gap-5">
             <h2 className="text-2xl font-bold">Hey, I am {`${firstName}`}</h2>
             <p className="text-7xl font-bold text-abreeze-stroke">
               {professionalTitle}
@@ -14,15 +14,14 @@ const About = ({ client, photo }) => {
             <p className="text-md mb-4">{summary}</p>
 
             <a href="#projects">
-              <button className="bg-abreeze-button text-abreeze-buttonText py-2 px-4 rounded-lg">
+              <button className="rounded-lg bg-abreeze-button px-4 py-2 text-abreeze-buttonText">
                 Browse Projects
               </button>
             </a>
           </div>
-          <div className="w-1/3 flex justify-center">
-            {/* <div className="border-2 p-6 rounded-full"> */}
+          <div className="flex w-1/3 justify-center">
             {photo && (
-              <div className="h-80 w-80 rounded-full overflow-hidden">
+              <div className="h-80 w-80 overflow-hidden rounded-full">
                 <motion.img
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.5 }}
@@ -32,7 +31,6 @@ const About = ({ client, photo }) => {
                 />
               </div>
             )}
-            {/* </div> */}
           </div>
         </div>
       )}

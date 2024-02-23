@@ -1,5 +1,3 @@
-// TestimonialsInput.js
-
 import React from "react";
 
 const Testimonials = ({
@@ -45,7 +43,7 @@ const Testimonials = ({
             onChange={(e) => handleChange(index, "company", e.target.value)}
           />
           <button
-            className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+            className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
             type="button"
             onClick={() => removeTestimonial(index)}
           >
@@ -54,7 +52,7 @@ const Testimonials = ({
         </div>
       ))}
       <button
-        className="bg-button text-white font-semibold p-2 rounded-lg px-4"
+        className="rounded-lg bg-button p-2 px-4 font-semibold text-white"
         type="button"
         onClick={addTestimonial}
       >
